@@ -1,0 +1,34 @@
+---
+import { GitCommitHorizontal, Code2, Tag } from 'lucide-astro';
+import { getRepoMeta } from '@/lib/github';
+
+type Props = {
+  github: string;
+};
+
+const { github } = Astro.props;
+const meta = await getRepoMeta(github);
+---
+
+{
+  meta && (
+    <div class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--muted)]">
+      <span class="inline-flex items-center gap-1.5">
+        <GitCommitHorizontal class="h-4 w-4" aria-hidden="true" />
+        Last push {meta.pushedAt.toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' })}
+      </span>
+      {meta.languages.length > 0 && (
+        <span class="inline-flex items-center gap-1.5">
+          <Code2 class="h-4 w-4" aria-hidden="true" />
+          {meta.languages.join(' · ')}
+        </span>
+      )}
+      {meta.latestRelease && (
+        <span class="inline-flex items-center gap-1.5">
+          <Tag class="h-4 w-4" aria-hidden="true" />
+          {meta.latestRelease}
+        </span>
+      )}
+    </div>
+  )
+}

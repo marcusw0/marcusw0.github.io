@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import { BookOpen, BriefcaseBusiness, FileText, Server } from 'lucide-astro';
+import BaseLayout from '@/components/BaseLayout.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+
+const projects = (await getCollection('projects'))
+  .filter((project) => project.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const features = [
+  { href: '/projects/', title: 'Projects', description: 'Case studies for automation, monitoring, and security tooling.', icon: BriefcaseBusiness },
+  { href: '/homelab/', title: 'Homelab', description: 'Structured infrastructure notes, network diagrams, and service docs.', icon: Server },
+  { href: '/blog/', title: 'Blog', description: 'Technical writeups focused on reproducible problem solving.', icon: BookOpen },
+  { href: '/resume/', title: 'Resume', description: 'Web resume with experience, engineering focus, and technical skills.', icon: FileText },
+];
+---
+
+<BaseLayout>
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
+    <div>
+      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Federal IT / Network Engineering</p>
+      <h1 class="max-w-4xl text-4xl font-bold tracking-[0] text-[var(--text)] sm:text-6xl">Marcus Whited</h1>
+      <p class="mt-5 text-xl font-medium text-[var(--muted)]">Network Security · Infrastructure Automation · Systems Engineering</p>
+      <p class="mt-6 max-w-3xl text-base leading-8 text-[var(--muted)]">
+        I engineer perimeter security controls, automate infrastructure, and document resilient systems. My work spans federal network services, public-sector IT, Python automation, and lab-driven security engineering.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/projects/" class="rounded-md bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--accent-contrast)] hover:bg-[var(--accent-strong)] hover:text-[var(--accent-hover-contrast)]">View projects</a>
+        <a href="/resume/" class="rounded-md border border-[var(--border)] px-4 py-2.5 text-sm font-semibold text-[var(--text)] hover:border-[var(--accent)] hover:bg-[var(--surface)]">Resume</a>
+      </div>
+    </div>
+    <div class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Selected outcomes</p>
+      <div class="mt-5 space-y-4 font-mono text-sm text-[var(--muted)]">
+        <p><span class="text-[var(--text)]">automation</span>: reduced manual effort by 60%</p>
+        <p><span class="text-[var(--text)]">migration</span>: led a domain move for approximately 450 users</p>
+        <p><span class="text-[var(--text)]">operations</span>: reestablished a multi-network data center in under 24 hours</p>
+        <p><span class="text-[var(--text)]">engineering</span>: modernized municipal network and firewall infrastructure</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
+    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {
+        features.map(({ href, title, description, icon: Icon }) => (
+          <a href={href} class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 hover:-translate-y-0.5 hover:border-[var(--accent)]">
+            <Icon class="h-5 w-5 text-[var(--accent-strong)]" />
+            <h2 class="mt-4 text-lg font-semibold text-[var(--text)]">{title}</h2>
+            <p class="mt-2 text-sm leading-6 text-[var(--muted)]">{description}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="border-y border-[var(--border)] bg-[var(--surface-strong)]/45">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+      <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Selected work</p>
+          <h2 class="mt-3 text-3xl font-bold text-[var(--text)]">Featured projects</h2>
+        </div>
+        <a href="/projects/" class="text-sm font-semibold text-[var(--accent-strong)] hover:text-[var(--text)]">All projects</a>
+      </div>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

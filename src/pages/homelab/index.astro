@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/components/BaseLayout.astro';
+import Card from '@/components/Card.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+
+const docs = (await getCollection('homelab')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Homelab | Marcus Whited" description="Sanitized homelab engineering documentation covering architecture, networking, security, services, and monitoring.">
+  <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+    <SectionHeader
+      eyebrow="Engineering documentation"
+      title="Homelab"
+      description="Structured documentation for network architecture, reverse proxying, DNS, secrets management, service operations, and monitoring."
+    />
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {
+        docs.map((doc) => (
+          <Card
+            href={`/homelab/${doc.id}/`}
+            title={doc.data.title}
+            description={doc.data.description}
+            meta={doc.data.section}
+            tags={doc.data.tags}
+          />
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

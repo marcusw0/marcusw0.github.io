@@ -1,0 +1,34 @@
+---
+import { Github } from 'lucide-astro';
+import type { CollectionEntry } from 'astro:content';
+
+type Props = {
+  project: CollectionEntry<'projects'>;
+};
+
+const { project } = Astro.props;
+const href = `/projects/${project.id}/`;
+---
+
+<article class="flex h-full flex-col rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
+  <div class="flex-1">
+    <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-strong)]">{project.data.date.getFullYear()}</p>
+    <h2 class="mt-3 text-xl font-semibold tracking-[0] text-[var(--text)]">
+      <a href={href} class="hover:text-[var(--accent-strong)]">{project.data.title}</a>
+    </h2>
+    <p class="mt-3 text-sm leading-6 text-[var(--muted)]">{project.data.description}</p>
+    <div class="mt-5 flex flex-wrap gap-2">
+      {project.data.tech.map((tech) => <span class="rounded-md border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)]">{tech}</span>)}
+    </div>
+  </div>
+  <div class="mt-6 flex items-center justify-between gap-3 border-t border-[var(--border)] pt-4">
+    <a href={href} class="text-sm font-semibold text-[var(--accent-strong)] hover:text-[var(--text)]">Read case study</a>
+    {
+      project.data.github && (
+        <a href={project.data.github} class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--text)]" aria-label={`${project.data.title} GitHub repository`}>
+          <Github class="h-4 w-4" />
+        </a>
+      )
+    }
+  </div>
+</article>

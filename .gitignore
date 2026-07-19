@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+# astro-d2 build artifacts (diagrams are inlined; these are regenerated every build)
+public/d2/
+.env
+.env.*
+!.env.example
+npm-debug.log*
+INSTRUCTIONS.md
+.DS_Store
+*:Zone.Identifier

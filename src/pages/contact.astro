@@ -1,0 +1,32 @@
+---
+import { Github, Linkedin, Mail } from 'lucide-astro';
+import BaseLayout from '@/components/BaseLayout.astro';
+import SectionHeader from '@/components/SectionHeader.astro';
+
+const links = [
+  { href: 'https://github.com/SemperCode06', label: 'GitHub', value: 'github.com/SemperCode06', icon: Github },
+  { href: 'https://www.linkedin.com/in/marcus-w-67355916b/', label: 'LinkedIn', value: 'linkedin.com/in/marcus-w-67355916b', icon: Linkedin },
+  { href: 'mailto:mawhited@marcuswhited.tech', label: 'Email', value: 'mawhited@marcuswhited.tech', icon: Mail },
+];
+---
+
+<BaseLayout title="Contact | Marcus Whited" description="Professional contact links for Marcus Whited, including email, GitHub, and LinkedIn.">
+  <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
+    <SectionHeader
+      eyebrow="Contact"
+      title="Get in Touch"
+      description="For network engineering, infrastructure automation, or security-focused opportunities, email is the most direct option. GitHub and LinkedIn provide additional project and professional context."
+    />
+    <div class="grid gap-5 md:grid-cols-3">
+      {
+        links.map(({ href, label, value, icon: Icon }) => (
+          <a href={href} rel="me noreferrer" class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 hover:-translate-y-0.5 hover:border-[var(--accent)]">
+            <Icon class="h-5 w-5 text-[var(--accent-strong)]" />
+            <h2 class="mt-4 font-semibold text-[var(--text)]">{label}</h2>
+            <p class="mt-2 break-words text-sm text-[var(--muted)]">{value}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
