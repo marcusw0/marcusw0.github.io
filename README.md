@@ -14,20 +14,20 @@ The site covers engineering projects, homelab documentation, a technical blog, a
 
 ## What's Here
 
-- **Projects** — engineering case studies with architecture notes and lessons learned
-- **Homelab** — documentation of the lab's networking, security, services, and monitoring
+- **Projects** — public, repository-backed builds plus an opt-in feed of recent GitHub work
+- **Homelab** — concise documentation of the lab's architecture, networking, and security
 - **Blog** — technical notes on Docker, DNS, routing, hardening, and troubleshooting
 - **Career** — timeline, skills, and certifications
 
 ## Running Locally
 
-Diagram generation needs the [D2 CLI](https://d2lang.com/tour/install) on your PATH:
+Install the [D2 CLI](https://d2lang.com/tour/install) on your PATH before generating diagrams.
 
 ```bash
 curl -fsSL https://d2lang.com/install.sh | sh -s -- --prefix "$HOME/.local"
 ```
 
-Then:
+Install the dependencies and start the development server.
 
 ```bash
 npm ci
@@ -35,6 +35,10 @@ npm run dev
 ```
 
 The dev server runs at `http://localhost:4321/`. Build the production site with `npm run build` and preview it with `npm run preview`.
+
+## GitHub Portfolio Feed
+
+The Projects page adds public repositories from `marcusw0` when they have the GitHub topic `portfolio`. The build excludes forks, archived repositories, and repositories already represented by a case study, then shows up to six by most recent push. If the GitHub API is unavailable, the page falls back to the curated case studies and a profile link.
 
 ## Contact
 

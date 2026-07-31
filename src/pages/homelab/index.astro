@@ -7,12 +7,12 @@ import SectionHeader from '@/components/SectionHeader.astro';
 const docs = (await getCollection('homelab')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="Homelab | Marcus Whited" description="Sanitized homelab engineering documentation covering architecture, networking, security, services, and monitoring.">
+<BaseLayout title="Homelab | Marcus Whited" description="A concise, sanitized look at the architecture, networking, security, and operating decisions behind my homelab.">
   <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
     <SectionHeader
-      eyebrow="Engineering documentation"
+      eyebrow="Under the hood"
       title="Homelab"
-      description="Structured documentation for network architecture, reverse proxying, DNS, secrets management, service operations, and monitoring."
+      description="Three focused views show how the services fit together, how traffic moves, and how I reduce exposure. Private addresses and other sensitive details stay out while the reusable decisions remain."
     />
     <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {

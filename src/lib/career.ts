@@ -5,12 +5,12 @@ export const careerExperience = [
     timelineOrganization: 'Bureau of the Fiscal Service',
     period: '2023–Present',
     summary:
-      'Engineers perimeter security controls, traffic policy, and infrastructure automation for federal network services, including Python workflows that reduced manual effort by 60%.',
+      'I work on perimeter security, traffic policy, and infrastructure automation for federal network services. Python automation cut manual effort by 60%.',
     points: [
-      'Coordinate infrastructure work with Treasury, Federal Reserve, government, and commercial stakeholders supporting Trusted Internet Connection services.',
-      'Configure web application firewall policies, access control lists, web filtering, and custom iRules for secure traffic handling.',
-      'Deploy infrastructure with Terraform, Ansible, and YAML to improve consistency and repeatability.',
-      'Automated workflows with Python, reducing manual effort by 60%.',
+      'Coordinate infrastructure work with teams across Treasury, the Federal Reserve, and other government and commercial organizations supporting Trusted Internet Connection services.',
+      'Build and maintain web application firewall policies, access control lists, web filtering, and custom iRules.',
+      'Use Terraform, Ansible, and YAML to make infrastructure changes more consistent and repeatable.',
+      'Built a Python orchestrator that updates roughly 70 Linux servers in health-checked stages, cutting manual effort by 60%.',
     ],
   },
   {
@@ -19,11 +19,11 @@ export const careerExperience = [
     timelineOrganization: 'City of Parkersburg',
     period: '2021–2023',
     summary:
-      'Responded to security events, redesigned network and firewall infrastructure, and supported city and public-safety users.',
+      'Handled security events, user support, and a redesign of the city\u2019s network and firewall infrastructure.',
     points: [
-      'Responded to security alerts, investigated vulnerabilities, and documented remediation recommendations.',
-      'Designed new network infrastructure and modernized firewall architecture, ACLs, and policies.',
-      'Resolved incidents for city employees and public-safety departments.',
+      'Investigated security alerts and vulnerabilities, then documented fixes and follow-up recommendations.',
+      'Designed new network infrastructure and modernized the firewall architecture, ACLs, and policies.',
+      'Resolved incidents for city staff, police, and fire department users.',
     ],
   },
   {
@@ -32,10 +32,10 @@ export const careerExperience = [
     timelineOrganization: 'USMC TSO',
     period: '2018–2020',
     summary:
-      'Led a domain migration for approximately 450 users, performed root-cause analysis, and automated administrative tasks with Python.',
+      'Led a domain migration for about 450 users, troubleshot service issues, and automated administrative work with Python.',
     points: [
-      'Led a domain migration for approximately 450 users while protecting data integrity.',
-      'Performed root-cause analysis and automated administrative work with Python.',
+      'Led a domain migration for about 450 users while protecting data integrity.',
+      'Diagnosed service failures and automated administrative work with Python.',
     ],
   },
   {
@@ -46,8 +46,8 @@ export const careerExperience = [
     summary:
       'Maintained secure communications and helped relocate and reestablish a multi-network data center in under 24 hours.',
     points: [
-      'Reestablished a multi-network data center after relocation in under 24 hours.',
-      'Maintained secure communications and supported executive-level video conferencing.',
+      'Helped relocate and reestablish a multi-network data center in under 24 hours.',
+      'Maintained secure communications and supported executive video conferences.',
     ],
   },
 ];
@@ -64,9 +64,8 @@ export const technicalSkills = [
   'Bash',
   'YAML',
   'JSON',
-  'Wireshark',
-  'Nmap',
-  'Burp Suite',
+  'Go',
+  'GitLab CI/CD',
 ];
 
 export const careerCredentials = [

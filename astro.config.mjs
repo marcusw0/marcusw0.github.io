@@ -7,6 +7,12 @@ import { rehypeD2Dark } from './src/lib/rehype-d2-dark';
 export default defineConfig({
   site: 'https://marcuswhited.tech',
   output: 'static',
+  redirects: {
+    '/homelab/services/': '/homelab/architecture/#services',
+    '/projects/self-hosted-gitlab/': '/homelab/architecture/#services',
+    '/projects/gitlab-deployment-platform/': '/blog/from-compose-folders-to-gitlab/',
+    '/projects/infrastructure-automation/': '/blog/from-compose-folders-to-gitlab/',
+  },
   integrations: [
     mdx(),
     // Inline SVGs (rather than <img>) so rehypeD2Dark can retarget the

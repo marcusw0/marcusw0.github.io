@@ -51,6 +51,14 @@ main {
   flex: 1;
 }
 
+.nav-scroll {
+  scrollbar-width: none;
+}
+
+.nav-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 .skip-link {
   position: fixed;
   top: 0.75rem;

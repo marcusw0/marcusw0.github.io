@@ -15,34 +15,34 @@ const { Content } = await render(project);
 
 <BaseLayout title={`${project.data.title} | Marcus Whited`} description={project.data.description}>
   <article class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
-    <a href="/projects/" class="text-sm font-semibold text-[var(--accent-strong)] hover:text-[var(--text)]">Back to projects</a>
-    <header class="mt-6 border-b border-[var(--border)] pb-8">
-      <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">{project.data.date.toLocaleDateString('en', { year: 'numeric', month: 'long' })}</p>
-      <h1 class="mt-3 text-4xl font-bold tracking-[0] text-[var(--text)]">{project.data.title}</h1>
-      <p class="mt-4 text-lg leading-8 text-[var(--muted)]">{project.data.description}</p>
+    <a href="/projects/" class="text-sm font-semibold text-(--accent-strong) hover:text-(--text)">Back to projects</a>
+    <header class="mt-6 border-b border-(--border) pb-8">
+      <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">{project.data.date.toLocaleDateString('en', { year: 'numeric', month: 'long' })}</p>
+      <h1 class="mt-3 text-4xl font-bold tracking-normal text-(--text)">{project.data.title}</h1>
+      <p class="mt-4 text-lg leading-8 text-(--muted)">{project.data.description}</p>
       <div class="mt-5 flex flex-wrap gap-2">
-        {project.data.tech.map((tech) => <span class="rounded-md border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)]">{tech}</span>)}
+        {project.data.tech.map((tech) => <span class="rounded-md border border-(--border) px-2 py-1 text-xs text-(--muted)">{tech}</span>)}
       </div>
       {
         (project.data.role || project.data.status) && (
           <dl class="mt-6 grid gap-4 sm:grid-cols-2">
-            {project.data.role && <div><dt class="text-xs uppercase tracking-wider text-[var(--muted)]">Role</dt><dd class="mt-1 font-medium text-[var(--text)]">{project.data.role}</dd></div>}
-            {project.data.status && <div><dt class="text-xs uppercase tracking-wider text-[var(--muted)]">Status</dt><dd class="mt-1 font-medium capitalize text-[var(--text)]">{project.data.status}</dd></div>}
+            {project.data.role && <div><dt class="text-xs uppercase tracking-wider text-(--muted)">Role</dt><dd class="mt-1 font-medium text-(--text)">{project.data.role}</dd></div>}
+            {project.data.status && <div><dt class="text-xs uppercase tracking-wider text-(--muted)">Status</dt><dd class="mt-1 font-medium capitalize text-(--text)">{project.data.status}</dd></div>}
           </dl>
         )
       }
       {
         project.data.outcomes.length > 0 && (
           <div class="mt-6">
-            <h2 class="text-sm font-semibold text-[var(--text)]">Outcomes</h2>
-            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-[var(--muted)]">{project.data.outcomes.map((outcome) => <li>{outcome}</li>)}</ul>
+            <h2 class="text-sm font-semibold text-(--text)">Outcomes</h2>
+            <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-(--muted)">{project.data.outcomes.map((outcome) => <li>{outcome}</li>)}</ul>
           </div>
         )
       }
       {
         project.data.github && (
           <>
-            <a href={project.data.github} class="mt-6 inline-flex items-center gap-2 rounded-md border border-[var(--border)] px-4 py-2 text-sm font-semibold text-[var(--text)] hover:border-[var(--accent)]">
+            <a href={project.data.github} class="mt-6 inline-flex items-center gap-2 rounded-md border border-(--border) px-4 py-2 text-sm font-semibold text-(--text) hover:border-(--accent)">
               <Github class="h-4 w-4" />
               GitHub repository
             </a>

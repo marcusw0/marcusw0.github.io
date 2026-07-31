@@ -6,49 +6,49 @@ import { careerCredentials, careerExperience, technicalSkills } from '@/lib/care
 import resumeUrl from '../../MarcusWhitedResume2025.docx?url';
 ---
 
-<BaseLayout title="Resume | Marcus Whited" description="Resume for Marcus Whited, a network engineer specializing in perimeter security, infrastructure automation, and systems administration.">
+<BaseLayout title="Resume | Marcus Whited" description="My experience in software development, network security, infrastructure automation, systems administration, Python, and Go.">
   <section class="mx-auto max-w-5xl px-4 py-14 sm:px-6 lg:px-8">
     <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-      <SectionHeader eyebrow="Resume" title="Marcus Whited" description="Network engineer focused on perimeter security, infrastructure automation, and reliable operations." />
-      <a href={resumeUrl} download="Marcus-Whited-Resume.docx" class="inline-flex w-fit shrink-0 items-center gap-2 rounded-md bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--accent-contrast)] hover:bg-[var(--accent-strong)] hover:text-[var(--accent-hover-contrast)]">
+      <SectionHeader eyebrow="Experience & skills" title="Marcus Whited" description="Network engineer and developer working across perimeter security, infrastructure automation, and systems operations." />
+      <a href={resumeUrl} download="Marcus-Whited-Resume.docx" class="inline-flex w-fit shrink-0 items-center gap-2 rounded-md bg-(--accent) px-4 py-2.5 text-sm font-semibold text-(--accent-contrast) hover:bg-(--accent-strong) hover:text-(--accent-hover-contrast)">
         <Download class="h-4 w-4" /> Download resume
       </a>
     </div>
 
-    <div class="mb-8 flex flex-wrap gap-4 text-sm text-[var(--muted)]">
+    <div class="mb-8 flex flex-wrap gap-4 text-sm text-(--muted)">
       <span class="inline-flex items-center gap-2"><MapPin class="h-4 w-4" /> Parkersburg, West Virginia</span>
-      <a href="mailto:mawhited@marcuswhited.tech" class="inline-flex items-center gap-2 text-[var(--accent-strong)] hover:text-[var(--text)]"><Mail class="h-4 w-4" /> mawhited@marcuswhited.tech</a>
+      <a href="mailto:mawhited@marcuswhited.tech" class="inline-flex items-center gap-2 text-(--accent-strong) hover:text-(--text)"><Mail class="h-4 w-4" /> mawhited@marcuswhited.tech</a>
     </div>
 
     <div class="space-y-8">
-      <section class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6">
-        <h2 class="text-xl font-semibold text-[var(--text)]">Summary</h2>
-        <p class="mt-3 leading-7 text-[var(--muted)]">Versatile IT specialist and network engineer with experience in network security, infrastructure as code, systems administration, and cross-functional delivery. Builds repeatable solutions that improve security controls and reduce manual operations.</p>
+      <section class="rounded-lg border border-(--border) bg-(--surface) p-6">
+        <h2 class="text-xl font-semibold text-(--text)">Summary</h2>
+        <p class="mt-3 leading-7 text-(--muted)">I'm a network engineer and developer with hands-on experience in perimeter security, infrastructure as code, systems administration, and automation. I write Python and Go, using software to reduce repetitive work and make infrastructure changes easier to review and troubleshoot. I'm exploring software engineering, security engineering, and network engineering opportunities.</p>
       </section>
 
-      <section class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6">
-        <h2 class="text-xl font-semibold text-[var(--text)]">Experience</h2>
+      <section class="rounded-lg border border-(--border) bg-(--surface) p-6">
+        <h2 class="text-xl font-semibold text-(--text)">Experience</h2>
         <div class="mt-5 space-y-7">
           {careerExperience.map((job) => (
             <article>
               <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                <div><h3 class="font-semibold text-[var(--text)]">{job.title}</h3><p class="text-sm text-[var(--accent-strong)]">{job.organization}</p></div>
-                <p class="text-sm text-[var(--muted)]">{job.period}</p>
+                <div><h3 class="font-semibold text-(--text)">{job.title}</h3><p class="text-sm text-(--accent-strong)">{job.organization}</p></div>
+                <p class="text-sm text-(--muted)">{job.period}</p>
               </div>
-              <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-[var(--muted)]">{job.points.map((point) => <li>{point}</li>)}</ul>
+              <ul class="mt-3 list-disc space-y-2 pl-5 text-sm leading-6 text-(--muted)">{job.points.map((point) => <li>{point}</li>)}</ul>
             </article>
           ))}
         </div>
       </section>
 
       <section class="grid gap-5 md:grid-cols-2">
-        <div class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6">
-          <h2 class="text-xl font-semibold text-[var(--text)]">Technical Skills</h2>
-          <div class="mt-4 flex flex-wrap gap-2">{technicalSkills.map((skill) => <span class="rounded-md border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)]">{skill}</span>)}</div>
+        <div class="rounded-lg border border-(--border) bg-(--surface) p-6">
+          <h2 class="text-xl font-semibold text-(--text)">Technical Skills</h2>
+          <div class="mt-4 flex flex-wrap gap-2">{technicalSkills.map((skill) => <span class="rounded-md border border-(--border) px-2 py-1 text-xs text-(--muted)">{skill}</span>)}</div>
         </div>
-        <div class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-6">
-          <h2 class="text-xl font-semibold text-[var(--text)]">Certification & Training</h2>
-          <ul class="mt-4 space-y-2 text-sm leading-6 text-[var(--muted)]">{careerCredentials.map((item) => <li>{item}</li>)}</ul>
+        <div class="rounded-lg border border-(--border) bg-(--surface) p-6">
+          <h2 class="text-xl font-semibold text-(--text)">Certification & Training</h2>
+          <ul class="mt-4 space-y-2 text-sm leading-6 text-(--muted)">{careerCredentials.map((item) => <li>{item}</li>)}</ul>
         </div>
       </section>
     </div>

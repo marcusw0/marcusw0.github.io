@@ -13,7 +13,7 @@ const sharedSchema = z.object({
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: sharedSchema.extend({
-    github: z.url().optional(),
+    github: z.url(),
     featured: z.boolean().default(false),
     status: z.enum(['active', 'complete', 'ongoing']).optional(),
     role: z.string().optional(),
@@ -31,7 +31,7 @@ const blog = defineCollection({
 const homelab = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/homelab' }),
   schema: sharedSchema.extend({
-    section: z.enum(['architecture', 'networking', 'security', 'services', 'monitoring']),
+    section: z.enum(['architecture', 'networking', 'security']),
     order: z.number().default(0),
   }),
 });

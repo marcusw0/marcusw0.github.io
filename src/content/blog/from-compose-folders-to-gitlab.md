@@ -1,15 +1,19 @@
 ---
 title: From Compose Folders to GitLab
-description: Designing a staged migration from manually managed Docker services to independent repositories, git version control, and short-lived deployment access.
+description: Why I'm moving manually managed Docker services into separate GitLab repositories with reviewed changes and short-lived deployment access.
 date: 2026-07-03
 tags: ["gitlab", "opentofu", "openbao", "devsecops"]
 tech: ["GitLab CI", "OpenTofu", "OpenBao", "Docker Compose", "Renovate", "Authentik", "Technitium DNS"]
 draft: false
 ---
 
-A directory full of Compose files and secrets pasted everywhere can run a useful homelab for years. It might work, but ask yourself these questions: What happens if a change breaks something and you don't remember what the config was before? Could the box be rebuilt without reconstructing manual steps from memory? What if your project folders were deleted? Are your secrets stored in a safe, centralized place?
+A directory full of Compose files can run a useful homelab for years. But can you roll back a bad change if you don't remember the old config? Could you rebuild the box without piecing manual steps together from memory? What happens if the project folders disappear? And are the secrets actually stored somewhere safe?
 
-This isn't theory for me — it's how I work professionally. Daily at work I'm interacting with GitLab deploying configs through pipelines, managing some services with Terraform, and maintaining a Python repo I wrote that rolls updates across Linux servers in separate groups — three groups at a time, one server per group — with health verification before and after each update. I know how much sanity git and pipelines buy, so I'm migrating each of my homelab services into its own GitLab repository early in my homelab journey. This may seem overboard to some but maybe I'll win you over. The point is to end up with explicit boundaries — who owns the code, where the state lives, which identity can read which secret, and how future me recovers the service.
+This is where platforms like GitHub and GitLab come in. I chose to host my own GitLab server because I'm already familiar with it in a professional setting, and self-hosting gives me the added benefit of running my own CI/CD runners. Getting an instance running was straightforward. Start an Ubuntu or Debian VM and follow the steps on GitLab's site.
+
+Self-hosting a GitLab server may seem excessive for a homelab, but it makes changes, upgrades, and ongoing management much easier. You can attach Renovate to each Docker service repository, schedule it to check daily for new versions, and have it open a merge request with the relevant release notes. That's only one example, but it has been a genuinely useful addition.
+
+The internal GitLab instance runs on a dedicated Ubuntu virtual machine. Traefik handles TLS, Authentik provides the normal OIDC login, SMTP delivers notifications, and local authentication remains available as a recovery path. The CI runner handles validation and protected manual jobs. Automated backups, restore testing, resource monitoring, and a documented upgrade process are still on the backlog.
 
 ## The Target Workflow
 
@@ -36,59 +40,45 @@ gitlab -> host: Deploy with temporary certificate
 gitlab -> api: Apply reviewed infrastructure plan
 ```
 
-Every active service gets a private project, a protected default branch, a validation pipeline, Renovate, deployment docs, and a rollback path. Services with useful APIs — DNS and identity, mainly — also get OpenTofu. This keeps services separated, allows Renovate to create merge requests for review when a new version of x service is released, and allows for easy rollback.
+Every active service gets a private project, a protected default branch, a validation pipeline, Renovate, deployment notes, and a rollback path. Services with useful APIs (mainly DNS and IDP) also get OpenTofu. Keeping the repos separate means Renovate can open a focused merge request for one service without kicking off a platform-wide deployment, and a rollback doesn't have to touch unrelated stacks.
 
-## Why Not a Monorepo
+State follows the same boundary. Each infrastructure project uses independent GitLab-managed state, and access to state and plan artifacts stays restricted because providers can serialize sensitive attributes. Frequently edited DNS and identity inventories remain in YAML while OpenTofu decodes and validates them.
 
-A monorepo might make the initial setup easier, but it also combines unrelated state files, credentials, deployment permissions, and failure domains into one blast radius. With independent repositories, the DNS pipeline can read DNS credentials without being able to touch identity or database credentials. Renovate can update one service without triggering a platform-wide deployment. A failed plan locks one state file instead of blocking everything.
-
-Each IaC repository uses its own GitLab-managed state named for the production environment — versioned, locked, and controlled through project membership. That doesn't make state harmless: providers can serialize sensitive attributes, and plan artifacts can leak values even when command output marks them sensitive. So state access and plan artifacts stay restricted too.
-
-## YAML as the Operator Interface
-
-The records I edit most often are easier to review in YAML than in repetitive HCL. The DNS repository keeps its authoritative record inventory in YAML, and OpenTofu decodes it, validates it, and turns each stable map key into a resource address.
-
-Authentik follows the same pattern: YAML describes providers, applications, outposts, and the references between them - while HCL resolves existing flow slugs and validates that every application and outpost points to a declared provider.
-
-One note here: once an application lives at an address like `authentik_application.this["dashboard"]`, changing the YAML key changes the state address. Display names and slugs can evolve freely, but inventory keys need to stay put unless a deliberate state move goes with the rename.
+Existing API resources are imported one dependency chain at a time. The declaration must produce a zero-change plan before I move forward. Otherwise, the code does not match the live object yet. Persistent services also need a backup and tested rollback path before migration.
 
 ## Avoiding Long-Lived Pipeline Credentials
 
-Storing a protected variable in GitLab beats committing a secret, but it's still a durable credential — something that needs rotating and can be copied if a job is compromised. The target design uses GitLab-issued OIDC identity instead.
+Storing a protected variable in GitLab beats committing a secret, but it's still a durable credential—something that needs rotating and can be copied if a job is compromised. This is where OpenBao comes into play. I already have experience with Vault, so OpenBao seemed like the right choice after picking OpenTofu over Terraform. OpenBao is an identity-based secrets and encryption management system that allows services to authenticate themselves and retrieve the tokens or secrets they need. Compared with a traditional password manager, systems like these can issue short-lived, dynamic secrets for services such as databases or Kubernetes.
 
 Each job presents a signed token to OpenBao. The role checks the issuer, audience, project path, protected reference, and environment before issuing a short-lived OpenBao token, and that token can only read the repository's production secret path or request a narrowly scoped action.
 
-SSH works the same way: the runner creates an ephemeral keypair, sends just the public key to OpenBao, and gets back a certificate that lasts a few minutes. Deployment hosts trust the OpenBao SSH certificate authority and won't accept unsigned public keys.
+SSH follows the same idea. The runner creates an ephemeral keypair, sends just the public key to OpenBao, and gets back a certificate that lasts a few minutes. The CA and deployment role are now defined. Installing that trust on deployment hosts is still part of the cutover.
 
 I've already run this pattern in production. For my server-update pipeline at work, I found that Vault can sign SSH certificates, stood up a Vault SSH CA, and had jobs SSH into servers with Vault-signed certificates instead of distributed keys — paired with a sudoers file that restricts the job account to exactly the commands it needs. OpenBao is the open-source fork of Vault, so the homelab version of this is familiar.
 
-Of course, this makes OpenBao itself the crown jewels and needs protecting. It'll run in a dedicated virtual-machine boundary with encrypted transport, integrated storage, audit logging, restricted network access, separately held recovery shares, and off-host snapshots.
-
-## Importing Existing Infrastructure Safely
-
-Adopting OpenTofu doesn't mean recreating resources that already work. Authentik in particular is full of providers, applications, policies, flows, and outposts whose relationships have to survive the migration intact.
-
-My rule for imports: declare one dependency chain, import the existing object by its API identifier, and require a zero-change plan. If the plan proposes an update or a replacement, the code doesn't match up yet, and nothing gets applied until it does. This is slower than a bulk import, but the alternative is an IaC migration that doubles as an accidental identity outage. Backups and a downloaded state version precede each import batch.
-
-The outpost transition follows the same principle. The current automatic deployment method relies on Docker socket access (I know, this was a terrible thing to do); the replacement uses explicitly deployed outpost containers with tokens pulled from OpenBao. The existing LDAP provider and outpost get imported first, and socket access will go away after the manual outposts pass authentication tests.
+Of course, that makes OpenBao the crown jewel, so it needs protecting. It runs on its own VM with TLS and restricted network access, and its API resources are managed separately from the VM lifecycle. Snapshots, audit logs, and TLS state each have their own backup requirements.
 
 ## Bootstrap Is Part of the Architecture
 
-There's a chicken-and-egg problem the final design can't escape: OpenBao can't issue the credential used for its own initial deployment, DNS may not resolve the secrets endpoint yet, and Traefik may depend on a secret that will eventually live in OpenBao.
+OpenBao's initial deployment had a chicken-and-egg problem. It could not issue the credential used to bootstrap itself, and recovery could not depend on DNS or Traefik being available.
 
-Rather than pretend those exceptions don't exist, I'm designing them in: a documented temporary SSH credential, one-time initialization from a trusted workstation, recovery material distributed outside Git, and bootstrap access removed once workload identity and SSH signing actually work. Pipelines distinguish bootstrap mode from normal operation, so a missing secret fails loudly instead of encouraging insecure fallback logic.
+I kept those exceptions explicit. A fixed trust anchor is applied from a trusted operator session, the direct VM recovery path still verifies TLS without depending on the proxy, and recovery material stays outside Git.
+
+Normal production plans use GitLab ID tokens. Bootstrap stays a separate, deliberate operation so a missing secret fails loudly instead of encouraging insecure fallback logic.
 
 ## Deployment Order
 
-The order is driven by dependencies:
+The order is driven by dependencies.
 
-1. Finalize the dedicated OpenBao VM, TLS, storage, recovery, and audit design.
-2. Configure GitLab JWT roles, per-project policies, secret paths, and SSH signing.
+1. Move service secrets and downstream jobs onto the OpenBao roles that are now defined.
+2. Validate the SSH CA path from GitLab runner to deployment host, then remove old static keys.
 3. Migrate Traefik while preserving certificate state and validating every route.
 4. Deploy Technitium, review the complete internal zone, and test DNS over TCP and UDP before changing clients.
 5. Migrate Authentik and import existing objects one dependency chain at a time.
 6. Move tunneling, VPN-isolated downloads, and application deployments into their repositories.
 
-If this all works, the end state is magical: Renovate opens a focused merge request, validation runs, OpenTofu shows a comprehensible plan, I approve production, the job authenticates without any stored credential, health checks pass, and the state records exactly what changed. No more manual tracking of what app is behind on updates or defaulting to 'app:latest' and allowing a patch to break an app.
+If this all works, the payoff is a pretty boring deployment. Renovate opens a focused merge request, validation runs, OpenTofu shows a plan I can understand, I approve production, the job authenticates without a stored credential, health checks pass, and the state records exactly what changed.
 
-None of it is fully deployed yet. The OpenBao VM work has to be finished first, and production jobs stay manual until I've actually exercised backups, health checks, and rollback — not just written down.
+No more manually tracking which app is behind on updates or defaulting to the latest image tag and letting a patch break something.
+
+The OpenBao foundation is now in place, but the migration isn't done. Downstream jobs still need to use the new service roles, secret values need to move, and the legacy credentials cannot disappear until the replacement path passes. Production jobs stay manual until I've exercised backups, health checks, and rollback — not just written them down.

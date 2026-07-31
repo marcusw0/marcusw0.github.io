@@ -14,9 +14,9 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur">
+<header class="sticky top-0 z-50 border-b border-(--border) bg-(--bg)/90 backdrop-blur">
   <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8" aria-label="Primary navigation">
-    <a href="/" class="font-semibold tracking-[0] text-[var(--text)]">Marcus Whited</a>
+    <a href="/" class="font-semibold tracking-normal text-(--text)">Marcus Whited</a>
     <div class="hidden items-center gap-1 md:flex">
       {
         navItems.map((item) => {
@@ -28,8 +28,8 @@ const currentPath = Astro.url.pathname;
               class:list={[
                 'rounded-md px-3 py-2 text-sm font-medium',
                 active
-                  ? 'bg-[var(--surface-strong)] text-[var(--text)]'
-                  : 'text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--text)]',
+                  ? 'bg-(--surface-strong) text-(--text)'
+                  : 'text-(--muted) hover:bg-(--surface) hover:text-(--text)',
               ]}
             >
               {item.label}
@@ -42,8 +42,8 @@ const currentPath = Astro.url.pathname;
       <ThemeToggle />
     </div>
   </nav>
-  <nav class="border-t border-[var(--border)] px-4 py-2 md:hidden" aria-label="Primary navigation">
-    <div class="mx-auto flex max-w-6xl gap-2 overflow-x-auto">
+  <nav class="border-t border-(--border) px-4 py-2 md:hidden" aria-label="Primary navigation">
+    <div class="nav-scroll mx-auto flex max-w-6xl gap-2 overflow-x-auto">
       {
         navItems.map((item) => {
           const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);
@@ -54,8 +54,8 @@ const currentPath = Astro.url.pathname;
               class:list={[
                 'shrink-0 rounded-md px-3 py-2 text-sm font-medium',
                 active
-                  ? 'bg-[var(--surface-strong)] text-[var(--text)]'
-                  : 'text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--text)]',
+                  ? 'bg-(--surface-strong) text-(--text)'
+                  : 'text-(--muted) hover:bg-(--surface) hover:text-(--text)',
               ]}
             >
               {item.label}

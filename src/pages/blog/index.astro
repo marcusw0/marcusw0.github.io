@@ -7,12 +7,12 @@ import SectionHeader from '@/components/SectionHeader.astro';
 const posts = (await getCollection('blog')).filter((post) => !post.data.draft).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<BaseLayout title="Blog | Marcus Whited" description="Technical notes on Docker networking, reverse proxies, infrastructure hardening, and secure deployment workflows.">
+<BaseLayout title="Blog | Marcus Whited" description="Notes on Docker networking, reverse proxies, infrastructure hardening, and the lessons I pick up while building.">
   <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
     <SectionHeader
-      eyebrow="Technical notes"
+      eyebrow="Notes from the work"
       title="Blog"
-      description="Markdown-based writeups focused on Docker networking, reverse proxy operations, homelab hardening, and infrastructure lessons learned."
+      description="What broke, what fixed it, and the tradeoffs I ran into while working on my homelab and automation projects."
     />
     <div class="grid gap-5 md:grid-cols-2">
       {

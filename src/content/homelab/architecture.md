@@ -1,136 +1,73 @@
 ---
-title: Homelab Architecture
-description: Sanitized network and service architecture for a segmented, Docker-based homelab.
-date: 2026-03-12
-tags: ["architecture", "networking", "documentation"]
-tech: ["Docker", "Traefik", "GitLab", "OpenTofu", "OpenBao", "Technitium DNS", "Authentik"]
+title: Homelab Overview
+description: A concise, sanitized look at the architecture, core services, trust boundaries, and recovery priorities in my homelab.
+date: 2026-07-30
+tags: ["architecture", "services", "operations"]
+tech: ["Docker", "Traefik", "GitLab", "OpenBao", "Technitium DNS", "Authentik"]
 section: "architecture"
 order: 1
 ---
 
-## System Overview
+I use the lab to practice operating complete systems across networking, identity, application delivery, secrets, and recovery. This page is the high-level map. The [networking](/homelab/networking/) and [security](/homelab/security/) pages cover the decisions inside their respective boundaries.
 
-```d2 title="System overview: request and service flow"
+## Architecture
+
+```d2 title="Homelab architecture and primary service relationships"
 direction: down
 
 internet: Internet { shape: cloud }
-dns: Public DNS
-firewall: Edge firewall
+publicdns: Public DNS
+edge: Edge firewall
 trusted: Trusted clients
-resolver: Internal DNS
-host: Container host {
+
+lab: Homelab {
+  dns: Internal DNS
   proxy: Reverse proxy
   identity: Identity provider
   apps: Application services
-  data: Private data services { shape: cylinder }
+  data: Private state { shape: cylinder }
+  gitlab: Source control and CI
+  openbao: Secrets and workload identity
 
-  proxy -> identity
-  proxy -> apps
+  dns -> proxy: Resolve private services
+  proxy -> identity: Authentication check
+  proxy -> apps: Routed requests
   identity -> data
   apps -> data
+  gitlab -> apps: Reviewed deployments
+  gitlab -> openbao: Short-lived job identity
 }
 
-internet -> dns
-internet -> firewall
-firewall -> trusted
-firewall -> host
-trusted -> resolver
+internet -> publicdns
+publicdns -> edge
+edge -> lab.proxy: HTTPS
+trusted -> lab.dns
+trusted -> lab.proxy
 ```
 
-*High-level request and service flow. Addresses, public hostnames, and management endpoints are intentionally omitted.*
+*Addresses, hostnames, credentials, and management endpoints are intentionally omitted.*
 
-## Ingress and Identity
+## Design Principles
 
-```d2 title="Ingress and identity flow"
-direction: right
+- Publish applications through one controlled ingress path instead of exposing each service directly.
+- Keep identity and persistent state on private networks with only the connections they require.
+- Treat DNS, certificates, identity, and secrets as infrastructure dependencies with their own health and recovery checks.
+- Make deployments reviewable and repeatable without hiding incomplete migrations or recovery work.
 
-client: Client
-proxy: Reverse proxy
-identity: Identity provider
-apps: Application services
-data: Private data services { shape: cylinder }
+## Services
 
-client -> proxy: HTTPS
-proxy -> identity: Authentication check
-identity -> proxy: Authorized session
-proxy -> apps
-apps -> data
-```
+| Service | Purpose | Operating boundary |
+| --- | --- | --- |
+| Traefik | HTTPS ingress and explicit file-provider routing | Reaches application frontends but does not mount the Docker socket |
+| Technitium DNS | Internal resolution, recursive DNS, and filtering | Serves trusted clients directly and persists configuration independently |
+| Authentik and PostgreSQL | Application identity and protected state | Keeps the database private and exposes authentication through controlled routes |
+| GitLab CE | Internal source control, CI, and protected deployment jobs | Runs on a dedicated virtual machine with OIDC login and local recovery access |
+| OpenBao | Scoped secrets, workload identity, and SSH signing | Runs on a separate restricted virtual machine with independent recovery material |
 
-*The proxy is the application ingress point. Identity and data dependencies remain on private container networks.*
+The public [Homelab Compose Examples project](/projects/homelab-infrastructure/) demonstrates the sanitized deployment patterns and validation checks without publishing the live topology.
 
-## Network Segmentation
+## Deployment and Recovery
 
-```d2 title="Network segmentation and trust boundaries"
-direction: down
+Service repositories use validation, reviewed changes, and explicit rollback notes. API-backed infrastructure uses OpenTofu where it provides a stable ownership model. File-based services remain in reviewed Compose and YAML. The staged move from manual folders to GitLab and short-lived credentials is documented in [From Compose Folders to GitLab](/blog/from-compose-folders-to-gitlab/).
 
-firewall: Edge firewall
-trusted: Trusted client network {
-  dns: Internal DNS
-}
-hosts: Service-host network {
-  proxy: Reverse proxy
-  frontend: Frontend container network {
-    apps: Application services
-  }
-  backend: Backend container network {
-    state: Databases and persistent state { shape: cylinder }
-  }
-
-  proxy -> frontend
-  frontend.apps -> backend
-}
-
-firewall -> trusted
-firewall -> hosts
-trusted -> hosts.proxy
-```
-
-*Trust boundaries reduce direct access to stateful services and keep management interfaces off the ingress path.*
-
-## Design Goals
-
-- Centralize HTTP/S ingress instead of publishing each application directly.
-- Use DNS-01 validation for wildcard certificates without exposing an ACME HTTP endpoint.
-- Treat internal DNS as an infrastructure dependency with independent health checks.
-- Use a dedicated identity provider for supported applications.
-- Keep credentials, addresses, hostnames, and environment-specific inventory outside public documentation.
-
-## Deployment Control Plane
-
-```d2 title="Deployment control plane"
-direction: right
-
-change: Merge request
-ci: GitLab pipeline
-plan: OpenTofu plan
-jobidentity: OIDC job identity
-openbao: OpenBao
-credentials: Scoped token or SSH certificate
-state: Project state { shape: cylinder }
-deploy: Protected deployment
-targets: Managed services {
-  dns: DNS
-  ingress: Ingress
-  identity: Identity
-  apps: Applications
-}
-
-change -> ci
-ci -> plan
-ci -> jobidentity
-jobidentity -> openbao
-openbao -> credentials
-plan -> state
-credentials -> deploy
-deploy -> targets.dns
-deploy -> targets.ingress
-deploy -> targets.identity
-deploy -> targets.apps
-```
-
-This control plane is being implemented incrementally. Repositories and validation paths are scaffolded, while the secrets VM, runners, production credential exchange, and service cutovers remain migration work.
-
-## Operational Priorities
-
-Availability checks cover ingress, DNS, certificate renewal, identity, secrets, and database health. Recovery documentation distinguishes runtime restoration order—network and DNS, ingress and identity, then applications—from the deployment-control dependencies required to rebuild the platform.
+Recovery follows dependency order. Network and DNS come first, followed by ingress and identity, then application state. GitLab and OpenBao have separate bootstrap and recovery paths so restoring the control plane does not depend on the services it manages.

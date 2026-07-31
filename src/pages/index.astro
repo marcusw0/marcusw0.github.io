@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { BookOpen, BriefcaseBusiness, FileText, Server } from 'lucide-astro';
+import { BookOpen, BriefcaseBusiness, Code2, FileText, GitBranch, Network, Server, ShieldCheck } from 'lucide-astro';
 import BaseLayout from '@/components/BaseLayout.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 
@@ -10,62 +10,95 @@ const projects = (await getCollection('projects'))
   .slice(0, 3);
 
 const features = [
-  { href: '/projects/', title: 'Projects', description: 'Case studies for automation, monitoring, and security tooling.', icon: BriefcaseBusiness },
-  { href: '/homelab/', title: 'Homelab', description: 'Structured infrastructure notes, network diagrams, and service docs.', icon: Server },
-  { href: '/blog/', title: 'Blog', description: 'Technical writeups focused on reproducible problem solving.', icon: BookOpen },
-  { href: '/resume/', title: 'Resume', description: 'Web resume with experience, engineering focus, and technical skills.', icon: FileText },
+  { href: '/projects/', title: 'Projects', description: 'Public software, security tools, and automation with source code.', icon: BriefcaseBusiness },
+  { href: '/homelab/', title: 'Homelab', description: 'The architecture, networking, and security decisions behind my lab.', icon: Server },
+  { href: '/blog/', title: 'Blog', description: 'Notes from migrations, experiments, and the problems that sent me digging.', icon: BookOpen },
+  { href: '/resume/', title: 'Resume', description: 'Where I\u2019ve worked, what I\u2019ve done, and the tools I use.', icon: FileText },
 ];
+
+const strengths = [
+  { title: 'Software development', skills: ['Python', 'Go'], icon: Code2 },
+  { title: 'Network engineering', skills: ['Load balancing', 'TLS', 'HTTP', 'VPN', 'DNS'], icon: Network },
+  { title: 'Security engineering', skills: ['WAF', 'ACLs', 'Web filtering', 'Sandboxing', 'DLP'], icon: ShieldCheck },
+  { title: 'Infrastructure & delivery', skills: ['Terraform', 'Ansible', 'GitLab CI/CD', 'Validation'], icon: GitBranch },
+];
+
+const targetRoles = ['Software engineering', 'Security engineering', 'Network engineering'];
+const featuredGridClass = projects.length > 2 ? 'lg:grid-cols-3' : 'lg:grid-cols-2';
 ---
 
-<BaseLayout>
+<BaseLayout
+  title="Marcus Whited | Network Engineer & Developer"
+  description="Network engineer and developer working across software, security, infrastructure automation, Python, and Go."
+>
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
     <div>
-      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Federal IT / Network Engineering</p>
-      <h1 class="max-w-4xl text-4xl font-bold tracking-[0] text-[var(--text)] sm:text-6xl">Marcus Whited</h1>
-      <p class="mt-5 text-xl font-medium text-[var(--muted)]">Network Security · Infrastructure Automation · Systems Engineering</p>
-      <p class="mt-6 max-w-3xl text-base leading-8 text-[var(--muted)]">
-        I engineer perimeter security controls, automate infrastructure, and document resilient systems. My work spans federal network services, public-sector IT, Python automation, and lab-driven security engineering.
+      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Network engineer · Python & Go developer</p>
+      <h1 class="max-w-4xl text-4xl font-bold tracking-normal text-(--text) sm:text-6xl">Marcus Whited</h1>
+      <p class="mt-5 text-xl font-medium text-(--muted)">Secure systems, practical software, and reliable networks</p>
+      <p class="mt-6 max-w-3xl text-base leading-8 text-(--muted)">
+        I'm a network engineer who likes working where infrastructure, security, and software meet. At work, I focus on federal perimeter security and Python automation. In my lab, I build with Python and Go, test deployment ideas, and share what I learn.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/projects/" class="rounded-md bg-[var(--accent)] px-4 py-2.5 text-sm font-semibold text-[var(--accent-contrast)] hover:bg-[var(--accent-strong)] hover:text-[var(--accent-hover-contrast)]">View projects</a>
-        <a href="/resume/" class="rounded-md border border-[var(--border)] px-4 py-2.5 text-sm font-semibold text-[var(--text)] hover:border-[var(--accent)] hover:bg-[var(--surface)]">Resume</a>
+        <a href="/projects/" class="rounded-md bg-(--accent) px-4 py-2.5 text-sm font-semibold text-(--accent-contrast) hover:bg-(--accent-strong) hover:text-(--accent-hover-contrast)">View projects</a>
+        <a href="/resume/" class="rounded-md border border-(--border) px-4 py-2.5 text-sm font-semibold text-(--text) hover:border-(--accent) hover:bg-(--surface)">Resume</a>
       </div>
     </div>
-    <div class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 shadow-sm">
-      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Selected outcomes</p>
-      <div class="mt-5 space-y-4 font-mono text-sm text-[var(--muted)]">
-        <p><span class="text-[var(--text)]">automation</span>: reduced manual effort by 60%</p>
-        <p><span class="text-[var(--text)]">migration</span>: led a domain move for approximately 450 users</p>
-        <p><span class="text-[var(--text)]">operations</span>: reestablished a multi-network data center in under 24 hours</p>
-        <p><span class="text-[var(--text)]">engineering</span>: modernized municipal network and firewall infrastructure</p>
+    <aside class="rounded-lg border border-(--border) bg-(--surface) p-5 shadow-sm" aria-labelledby="strengths-heading">
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Core strengths</p>
+      <h2 id="strengths-heading" class="mt-2 text-xl font-semibold text-(--text)">Engineering across code and infrastructure</h2>
+      <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+        {
+          strengths.map(({ title, skills, icon: Icon }) => (
+            <div class="flex gap-3">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-(--surface-strong) text-(--accent-strong)">
+                <Icon class="h-4 w-4" aria-hidden="true" />
+              </span>
+              <div>
+                <h3 class="text-sm font-semibold text-(--text)">{title}</h3>
+                <p class="mt-1 text-sm leading-6 text-(--muted)">{skills.join(' · ')}</p>
+              </div>
+            </div>
+          ))
+        }
       </div>
-    </div>
+      <div class="mt-6 border-t border-(--border) pt-5">
+        <p class="flex items-center gap-2 text-sm font-semibold text-(--text)">
+          <span class="h-2 w-2 rounded-full bg-(--accent)" aria-hidden="true"></span>
+          Open to new opportunities
+        </p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          {targetRoles.map((role) => <span class="rounded-md border border-(--border) px-2.5 py-1.5 text-xs text-(--muted)">{role}</span>)}
+        </div>
+        <a href="/contact/" class="mt-4 inline-flex text-sm font-semibold text-(--accent-strong) hover:text-(--text)">Get in touch <span aria-hidden="true">&nbsp;→</span></a>
+      </div>
+    </aside>
   </section>
 
   <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       {
         features.map(({ href, title, description, icon: Icon }) => (
-          <a href={href} class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 hover:-translate-y-0.5 hover:border-[var(--accent)]">
-            <Icon class="h-5 w-5 text-[var(--accent-strong)]" />
-            <h2 class="mt-4 text-lg font-semibold text-[var(--text)]">{title}</h2>
-            <p class="mt-2 text-sm leading-6 text-[var(--muted)]">{description}</p>
+          <a href={href} class="rounded-lg border border-(--border) bg-(--surface) p-5 hover:-translate-y-0.5 hover:border-(--accent)">
+            <Icon class="h-5 w-5 text-(--accent-strong)" />
+            <h2 class="mt-4 text-lg font-semibold text-(--text)">{title}</h2>
+            <p class="mt-2 text-sm leading-6 text-(--muted)">{description}</p>
           </a>
         ))
       }
     </div>
   </section>
 
-  <section class="border-y border-[var(--border)] bg-[var(--surface-strong)]/45">
+  <section class="border-y border-(--border) bg-(--surface-strong)/45">
     <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
       <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">Selected work</p>
-          <h2 class="mt-3 text-3xl font-bold text-[var(--text)]">Featured projects</h2>
+          <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Selected work</p>
+          <h2 class="mt-3 text-3xl font-bold text-(--text)">Featured projects</h2>
         </div>
-        <a href="/projects/" class="text-sm font-semibold text-[var(--accent-strong)] hover:text-[var(--text)]">All projects</a>
+        <a href="/projects/" class="text-sm font-semibold text-(--accent-strong) hover:text-(--text)">All projects</a>
       </div>
-      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div class:list={['grid gap-5 md:grid-cols-2', featuredGridClass]}>
         {projects.map((project) => <ProjectCard project={project} />)}
       </div>
     </div>

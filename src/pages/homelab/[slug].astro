@@ -13,11 +13,11 @@ const { Content } = await render(doc);
 
 <BaseLayout title={`${doc.data.title} | Marcus Whited`} description={doc.data.description}>
   <article class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
-    <a href="/homelab/" class="text-sm font-semibold text-[var(--accent-strong)] hover:text-[var(--text)]">Back to homelab</a>
-    <header class="mt-6 border-b border-[var(--border)] pb-8">
-      <p class="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--accent-strong)]">{doc.data.section}</p>
-      <h1 class="mt-3 text-4xl font-bold tracking-[0] text-[var(--text)]">{doc.data.title}</h1>
-      <p class="mt-4 text-lg leading-8 text-[var(--muted)]">{doc.data.description}</p>
+    <a href="/homelab/" class="text-sm font-semibold text-(--accent-strong) hover:text-(--text)">Back to homelab</a>
+    <header class="mt-6 border-b border-(--border) pb-8">
+      <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">{doc.data.section}</p>
+      <h1 class="mt-3 text-4xl font-bold tracking-normal text-(--text)">{doc.data.title}</h1>
+      <p class="mt-4 text-lg leading-8 text-(--muted)">{doc.data.description}</p>
     </header>
     <div class="prose-tech mt-8">
       <Content />

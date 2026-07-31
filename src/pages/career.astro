@@ -6,34 +6,34 @@ import { careerCredentials, careerExperience, technicalSkills } from '@/lib/care
 const timeline = [...careerExperience].reverse();
 ---
 
-<BaseLayout title="Career | Marcus Whited" description="Career timeline for Marcus Whited, covering federal network engineering, public-sector IT, systems administration, and military communications.">
+<BaseLayout title="Career | Marcus Whited" description="My path from military communications and municipal IT to federal network engineering and automation.">
   <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
     <SectionHeader
-      eyebrow="Professional path"
-      title="Career Timeline"
-      description="A technical progression from disciplined operations into network engineering, automation, and cybersecurity."
+      eyebrow="How I got here"
+      title="My Career So Far"
+      description="I started in military communications and systems administration, moved into municipal IT, and now work on federal network security and automation."
     />
     <div class="grid gap-10 lg:grid-cols-[1fr_320px]">
-      <div class="relative border-l border-[var(--border)] pl-6">
+      <div class="relative border-l border-(--border) pl-6">
         {
           timeline.map((item) => (
-            <article class="relative mb-8 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5">
-              <span class="absolute -left-[31px] top-6 h-3 w-3 rounded-full border-2 border-[var(--bg)] bg-[var(--accent)]"></span>
-              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-strong)]">{item.period}</p>
-              <h2 class="mt-2 text-xl font-semibold text-[var(--text)]">{item.title} · {item.timelineOrganization}</h2>
-              <p class="mt-3 text-sm leading-6 text-[var(--muted)]">{item.summary}</p>
+            <article class="relative mb-8 rounded-lg border border-(--border) bg-(--surface) p-5">
+              <span class="absolute -left-7.75 top-6 h-3 w-3 rounded-full border-2 border-(--bg) bg-(--accent)"></span>
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent-strong)">{item.period}</p>
+              <h2 class="mt-2 text-xl font-semibold text-(--text)">{item.title} · {item.timelineOrganization}</h2>
+              <p class="mt-3 text-sm leading-6 text-(--muted)">{item.summary}</p>
             </article>
           ))
         }
       </div>
       <aside class="space-y-5">
-        <div class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5">
-          <h2 class="font-semibold text-[var(--text)]">Skills</h2>
-          <div class="mt-4 flex flex-wrap gap-2">{technicalSkills.map((skill) => <span class="rounded-md border border-[var(--border)] px-2 py-1 text-xs text-[var(--muted)]">{skill}</span>)}</div>
+        <div class="rounded-lg border border-(--border) bg-(--surface) p-5">
+          <h2 class="font-semibold text-(--text)">Skills</h2>
+          <div class="mt-4 flex flex-wrap gap-2">{technicalSkills.map((skill) => <span class="rounded-md border border-(--border) px-2 py-1 text-xs text-(--muted)">{skill}</span>)}</div>
         </div>
-        <div class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5">
-          <h2 class="font-semibold text-[var(--text)]">Certification & Training</h2>
-          <ul class="mt-4 space-y-2 text-sm leading-6 text-[var(--muted)]">{careerCredentials.map((item) => <li>{item}</li>)}</ul>
+        <div class="rounded-lg border border-(--border) bg-(--surface) p-5">
+          <h2 class="font-semibold text-(--text)">Certification & Training</h2>
+          <ul class="mt-4 space-y-2 text-sm leading-6 text-(--muted)">{careerCredentials.map((item) => <li>{item}</li>)}</ul>
         </div>
       </aside>
     </div>

@@ -1,21 +1,68 @@
 ---
 import { getCollection } from 'astro:content';
+import { Github } from 'lucide-astro';
 import BaseLayout from '@/components/BaseLayout.astro';
+import GitHubRepoCard from '@/components/GitHubRepoCard.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
+import { getPortfolioRepos } from '@/lib/github';
 
 const projects = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const githubProfile = 'https://github.com/marcusw0';
+const githubRepos = await getPortfolioRepos(
+  'marcusw0',
+  projects.map((project) => project.data.github),
+);
 ---
 
-<BaseLayout title="Projects | Marcus Whited" description="Engineering case studies covering network security, infrastructure automation, self-hosted services, and operational validation.">
+<BaseLayout title="Projects | Marcus Whited" description="Public software, security, and automation projects with source code, implementation notes, and validation evidence.">
   <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
     <SectionHeader
-      eyebrow="Technical work"
+      eyebrow="Built and published"
       title="Projects"
-      description="Infrastructure, automation, and security projects documented as compact engineering case studies."
+      description="A curated set of things I've built and published. Each case study connects the implementation decisions and testing evidence to its public source code."
     />
-    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => <ProjectCard project={project} />)}
-    </div>
+
+    <section aria-labelledby="featured-builds-heading">
+      <div class="mb-6">
+        <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Case studies</p>
+        <h2 id="featured-builds-heading" class="mt-2 text-2xl font-bold text-(--text)">Featured builds</h2>
+      </div>
+      <div class="grid gap-5 md:grid-cols-2">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
+
+    {
+      githubRepos.length > 0 ? (
+        <section class="mt-16 border-t border-(--border) pt-12" aria-labelledby="github-work-heading">
+          <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div class="max-w-2xl">
+              <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Automatically updated</p>
+              <h2 id="github-work-heading" class="mt-2 text-2xl font-bold text-(--text)">More from GitHub</h2>
+              <p class="mt-3 text-sm leading-6 text-(--muted)">Recent public repositories I've marked for the portfolio, ordered by their latest push.</p>
+            </div>
+            <a href={githubProfile} rel="noreferrer" class="inline-flex w-fit items-center gap-2 text-sm font-semibold text-(--accent-strong) hover:text-(--text)">
+              <Github class="h-4 w-4" aria-hidden="true" />
+              View GitHub profile
+            </a>
+          </div>
+          <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {githubRepos.map((repository) => <GitHubRepoCard repository={repository} />)}
+          </div>
+        </section>
+      ) : (
+        <aside class="mt-12 flex flex-col gap-4 rounded-lg border border-(--border) bg-(--surface) p-5 sm:flex-row sm:items-center sm:justify-between" aria-labelledby="github-profile-heading">
+          <div>
+            <h2 id="github-profile-heading" class="font-semibold text-(--text)">More on GitHub</h2>
+            <p class="mt-1 text-sm leading-6 text-(--muted)">Browse my public repositories, source code, and current work directly on GitHub.</p>
+          </div>
+          <a href={githubProfile} rel="noreferrer" class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-(--accent-strong) hover:text-(--text)">
+            <Github class="h-4 w-4" aria-hidden="true" />
+            View GitHub profile
+          </a>
+        </aside>
+      )
+    }
   </section>
 </BaseLayout>

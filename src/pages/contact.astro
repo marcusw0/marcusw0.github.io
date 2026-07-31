@@ -4,26 +4,26 @@ import BaseLayout from '@/components/BaseLayout.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
 
 const links = [
-  { href: 'https://github.com/SemperCode06', label: 'GitHub', value: 'github.com/SemperCode06', icon: Github },
+  { href: 'https://github.com/marcusw0', label: 'GitHub', value: 'github.com/marcusw0', icon: Github },
   { href: 'https://www.linkedin.com/in/marcus-w-67355916b/', label: 'LinkedIn', value: 'linkedin.com/in/marcus-w-67355916b', icon: Linkedin },
   { href: 'mailto:mawhited@marcuswhited.tech', label: 'Email', value: 'mawhited@marcuswhited.tech', icon: Mail },
 ];
 ---
 
-<BaseLayout title="Contact | Marcus Whited" description="Professional contact links for Marcus Whited, including email, GitHub, and LinkedIn.">
+<BaseLayout title="Contact | Marcus Whited" description="Get in touch with Marcus Whited by email, GitHub, or LinkedIn.">
   <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6 lg:px-8">
     <SectionHeader
-      eyebrow="Contact"
-      title="Get in Touch"
-      description="For network engineering, infrastructure automation, or security-focused opportunities, email is the most direct option. GitHub and LinkedIn provide additional project and professional context."
+      eyebrow="Say hello"
+      title="Let's Talk"
+      description="Email is the best way to reach me about software engineering, security engineering, network engineering, or a project. You can also find my work on GitHub and my career history on LinkedIn."
     />
     <div class="grid gap-5 md:grid-cols-3">
       {
         links.map(({ href, label, value, icon: Icon }) => (
-          <a href={href} rel="me noreferrer" class="rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 hover:-translate-y-0.5 hover:border-[var(--accent)]">
-            <Icon class="h-5 w-5 text-[var(--accent-strong)]" />
-            <h2 class="mt-4 font-semibold text-[var(--text)]">{label}</h2>
-            <p class="mt-2 break-words text-sm text-[var(--muted)]">{value}</p>
+          <a href={href} rel="me noreferrer" class="rounded-lg border border-(--border) bg-(--surface) p-5 hover:-translate-y-0.5 hover:border-(--accent)">
+            <Icon class="h-5 w-5 text-(--accent-strong)" />
+            <h2 class="mt-4 font-semibold text-(--text)">{label}</h2>
+            <p class="mt-2 wrap-break-word text-sm text-(--muted)">{value}</p>
           </a>
         ))
       }

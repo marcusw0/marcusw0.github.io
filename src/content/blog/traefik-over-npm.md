@@ -1,22 +1,22 @@
 ---
 title: Traefik > NGINX Proxy Manager
-description: Why I made the switch
+description: Why I replaced NGINX Proxy Manager with file-based Traefik routing.
 date: 2026-02-22
 tags: ["traefik", "cloudflare", "tls"]
 tech: ["Traefik", "Docker", "Cloudflare"]
 ---
 
-When I first built my homelab, I decided to go with NGINX Proxy Manager (NPM for short) because of how many videos and posts I saw about it. I was a bit disappointed by how little you have control over. You add a service, hit a few toggles for HSTS and security settings, and that's about it. I started looking into what else was out there and found Traefik.
+When I first built my homelab, I went with NGINX Proxy Manager (NPM) because it showed up in so many videos and posts. I was a bit disappointed by how little control it gave me. You add a service, hit a few toggles for HSTS and other security settings, and that's about it. I started looking at the alternatives and found Traefik.
 
 ## How Traefik Won Me Over
 
-Traefik is exactly what I was looking for. You define how you want the reverse proxy to function. Want to define what Cipher Suites to allow? Configure custom health checks? Create allow lists, configure custom headers, add IPS middlewares, redirect to identity provider for auth before allowing access? You can do all of that and more. It's actually very impressive how feature packed Traefik is and I don't know why anyone would use NPM over it.
+Traefik is exactly what I was looking for. I get to define how the reverse proxy should behave. Cipher suites, custom health checks, allow lists, security headers, IPS middleware, and identity-provider authentication can all live in config. Once I saw how much control that gave me, I was sold.
 
 ## My Traefik Layout
 
-There's many ways you can manage Traefik, but my personal favorite is through files. How it works is you can have your routers, middlewares, and services in dynamic files that you can update on the fly. You can have it all in one dynamic file, split by service, or by type which is how I do it. One file for middlewares, one for services, and one for routers.
+There are several ways to manage Traefik, but I prefer files. Routers, middlewares, and services live in dynamic configuration that can be updated on the fly. You can keep everything in one file, split it by service, or split it by type. I use one file for middlewares, one for services, and one for routers.
 
-Traefik watches those files, so saving a change applies it live — no container restart, no dropped connections. Here's what one route looks like end to end (in my setup these three blocks live in their separate files):
+Traefik watches those files, so saving a change applies it live — no container restart, no dropped connections. Here is what one route looks like end to end. In my setup, these three blocks live in separate files.
 
 ```yaml
 http:
@@ -45,7 +45,7 @@ http:
           - url: "http://dashboard:8080"
 ```
 
-That `internal-only` middleware is the kind of thing NPM can't really express: define it once, attach it to any router that should never be reachable from outside the LAN. Same story for auth — one middleware pointing at the identity provider, and any service can require SSO just by adding it to the router's middleware list.
+That `internal-only` middleware is the kind of thing NPM cannot really express. I can define it once and attach it to any router that should never be reachable from outside the LAN. The same idea works for authentication. One middleware points at the identity provider, and any service can require SSO by adding it to the router's middleware list.
 
 ## Certificates Without Opening Port 80
 
@@ -53,6 +53,6 @@ The other half of the setup is Cloudflare. Traefik's ACME resolver uses the DNS 
 
 ## Should You Switch?
 
-To be fair to NPM: it got me routing traffic in less than an hour, and there's real value in that. Traefik's learning curve is steeper — the docs are dense, and the first working config takes an evening instead of ten minutes.
+To be fair to NPM, it got me routing traffic in less than an hour, and there is real value in that. Traefik's learning curve is steeper — the docs are dense, and the first working config takes an evening instead of ten minutes.
 
-That config is the point though. Everything above lives in dynamic files instead of toggles in a web UI. I have full control over everything. If you've ever hit the ceiling of what NPM will let you do, that's the sign to switch.
+That config is the point, though. Everything above lives in files I can review instead of toggles in a web UI. If you've hit the ceiling of what NPM will let you do, Traefik is worth the steeper learning curve.

@@ -1,63 +1,39 @@
 ---
-title: Homelab Infrastructure
-description: Compose-managed lab platform for secure ingress, DNS, identity, persistent services, and operationally tested applications.
+title: Homelab Compose Examples
+description: Sanitized Docker Compose templates with automated configuration validation, secret-leak checks, and documented security boundaries.
 date: 2025-11-20
-tags: ["homelab", "docker", "networking"]
-tech: ["Docker", "Traefik", "Cloudflare", "Technitium DNS", "Authentik", "PostgreSQL", "Python"]
-github: "https://github.com/SemperCode06/homelab-compose-examples"
+tags: ["docker", "automation", "security"]
+tech: ["Docker Compose", "GitHub Actions", "Shell", "Gitleaks", "Traefik", "Authentik", "Technitium DNS"]
+github: "https://github.com/marcusw0/homelab-compose-examples"
 featured: true
 status: ongoing
-role: Designer and operator
+role: Developer and maintainer
 outcomes:
-  - Isolated public ingress from private identity and database dependencies.
-  - Added health-gated startup and persistent recovery boundaries for core services.
-  - Established smoke and soak testing for a custom containerized application.
-  - Published sanitized Compose templates with automated configuration and secret-leak checks.
+  - Published reusable Compose examples without exposing live addresses, domains, or credentials.
+  - Added automated rendering and sanitization checks for every included stack.
+  - Added full-history secret scanning to the repository validation workflow.
+  - Documented exposure, persistence, and network settings that require review before deployment.
 ---
 
-## Overview
+## Objective
 
-My homelab is built to be rebuildable: a platform for testing network patterns, service deployment, identity, DNS, certificate automation, and security controls. Each stack deploys independently and only joins the shared frontend network when it needs proxy access.
+I wanted to publish useful examples from my homelab without turning the repository into a copy of the live environment. The result is a set of sanitized Compose templates that demonstrate service boundaries, health-gated startup, persistent storage, and explicit ingress while keeping private topology and credentials out of the repository.
 
-## Architecture
+## What the Repository Contains
 
-```d2
-direction: down
+The examples cover representative ingress, DNS, identity, database, and application patterns. Each stack uses placeholder addresses and domains, requires secrets as deployment inputs, and documents the settings that must be reviewed before someone adapts it.
 
-internet: Internet { shape: cloud }
-publicdns: Public DNS
-traefik: Traefik 3.7
-routed: File-provider routes
-apps: Application services
-recorder: Custom stream recorder
-authentik: Authentik server
-postgres: PostgreSQL 16 { shape: cylinder }
-lan: LAN clients
-technitium: Technitium DNS
+The templates emphasize a few repeatable boundaries.
 
-internet -> publicdns
-publicdns -> traefik
-traefik -> routed
-routed -> apps
-routed -> recorder
-routed -> authentik
-authentik -> postgres
-lan -> technitium
-```
+- Application interfaces join the shared proxy network only when Traefik needs to route to them.
+- Databases and other stateful dependencies stay on private backend networks.
+- Readiness checks gate dependent services instead of relying on container start order.
+- Containers run without unnecessary privileges or direct host exposure.
+- Persistent configuration, application state, and large data have separate recovery responsibilities.
 
-## Implemented Controls
+## Repository Validation
 
-- Traefik runs without a Docker socket and with `no-new-privileges`.
-- PostgreSQL readiness gates Authentik server and worker startup.
-- Secrets are required as deployment inputs rather than stored in Compose definitions.
-- DNS recursion is limited to private networks and upstream forwarding uses HTTPS.
-- The custom recorder runs non-root, exposes no direct host port, checks disk capacity, and reports health.
-
-## Operational Validation
-
-The recorder deployment exercises state changes, live capture, graceful shutdown, restart persistence, deliberately insufficient disk capacity, and a 24–48 hour soak period. Captures use MKV for failure tolerance and are remuxed to MP4 after a clean stop. This workflow has become my template for testing other lab services beyond "the container started."
-
-The public Compose examples add repository-level validation. A shell script renders every stack with its example environment, then runs sanitization checks. GitHub Actions executes that validation on pushes and pull requests and runs Gitleaks against full repository history.
+A shell script renders every Compose file with its example environment and then runs repository-specific sanitization checks.
 
 ```bash
 for compose in */compose.yml; do
@@ -68,8 +44,14 @@ done
 ./scripts/check-sanitization.sh
 ```
 
-The published templates use documentation-only addresses and domains, keep real environment files excluded, and require operators to review storage, exposure, and network assumptions before deployment.
+GitHub Actions runs those checks on pushes and pull requests. Gitleaks also scans the complete repository history, which catches more than checking only the current working tree.
 
-## Lessons Learned
+## Testing Approach
 
-I get the most out of the lab when it behaves like production at a smaller scale — health-gated dependencies, explicit exposure, failure testing, and recovery boundaries matter even when the services are personal. Current priorities: consolidating duplicate DNS manifests, finishing proxy hardening, and defining backup restore tests.
+I treat successful configuration rendering as the first check, not the finish line. Application changes also need service health, restart persistence, failure-path testing, and enough runtime to expose delayed problems.
+
+## What This Demonstrates
+
+The project is less about publishing one exact homelab and more about making infrastructure examples safe to share and straightforward to review. It demonstrates how I structure Compose services, encode security boundaries, automate validation, and distinguish a container that started from a service that is actually ready.
+
+The live architecture and operating decisions remain in the separate [Homelab documentation](/homelab/).

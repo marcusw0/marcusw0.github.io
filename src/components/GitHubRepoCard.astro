@@ -1,0 +1,34 @@
+---
+import { Github } from 'lucide-astro';
+import type { GitHubRepository } from '@/lib/github';
+
+type Props = {
+  repository: GitHubRepository;
+};
+
+const { repository } = Astro.props;
+const titleId = `github-${repository.name.replace(/[^a-zA-Z0-9_-]/g, '-')}-title`;
+---
+
+<article class="group relative flex h-full cursor-pointer flex-col rounded-lg border border-(--border) bg-(--surface) p-5 shadow-sm transition-[border-color,transform] duration-150 hover:-translate-y-0.5 hover:border-(--accent)">
+  <a href={repository.url} rel="noreferrer" class="absolute inset-0 z-0 rounded-lg" aria-labelledby={titleId}></a>
+  <div class="pointer-events-none relative z-10 flex flex-1 flex-col">
+    <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-(--accent-strong)">
+      <Github class="h-4 w-4" aria-hidden="true" />
+      GitHub repository
+    </div>
+    <h3 id={titleId} class="mt-3 text-lg font-semibold text-(--text) group-hover:text-(--accent-strong)">{repository.name}</h3>
+    <p class="mt-3 flex-1 text-sm leading-6 text-(--muted)">{repository.description}</p>
+    {
+      repository.topics.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {repository.topics.map((topic) => <span class="rounded-md border border-(--border) px-2 py-1 text-xs text-(--muted)">{topic}</span>)}
+        </div>
+      )
+    }
+    <div class="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-(--border) pt-4 text-xs text-(--muted)">
+      {repository.primaryLanguage && <span>{repository.primaryLanguage}</span>}
+      <span>Updated {repository.pushedAt.toLocaleDateString('en', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+    </div>
+  </div>
+</article>
