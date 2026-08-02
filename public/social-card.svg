@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
   <title id="title">Marcus Whited</title>
-  <desc id="desc">Network engineering, infrastructure automation, and cybersecurity portfolio.</desc>
+  <desc id="desc">Software development, network infrastructure, and security portfolio.</desc>
   <rect width="1200" height="630" fill="#081116"/>
   <path d="M0 470 430 150l300 260 470-290v510H0z" fill="#0d1a21"/>
   <text x="100" y="275" fill="#e6f0f2" font-family="system-ui, sans-serif" font-size="76" font-weight="700">Marcus Whited</text>
-  <text x="104" y="355" fill="#6ee7d8" font-family="system-ui, sans-serif" font-size="34">Network Engineering · Automation · Security</text>
+  <text x="104" y="355" fill="#6ee7d8" font-family="system-ui, sans-serif" font-size="34">Software Development · Network Infrastructure · Security</text>
   <text x="104" y="425" fill="#9eb2bc" font-family="ui-monospace, monospace" font-size="25">marcuswhited.tech</text>
 </svg>
