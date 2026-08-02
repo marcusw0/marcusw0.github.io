@@ -10,9 +10,9 @@ const projects = (await getCollection('projects'))
   .slice(0, 3);
 
 const features = [
-  { href: '/projects/', title: 'Projects', description: 'Public software, security tools, and automation with source code.', icon: BriefcaseBusiness },
-  { href: '/homelab/', title: 'Homelab', description: 'The architecture, networking, and security decisions behind my lab.', icon: Server },
-  { href: '/blog/', title: 'Blog', description: 'Notes from migrations, experiments, and the problems that sent me digging.', icon: BookOpen },
+  { href: '/projects/', title: 'Projects', description: 'Current and past projects of mine with Github links.', icon: BriefcaseBusiness },
+  { href: '/homelab/', title: 'Homelab', description: 'The architecture, networking, and decisions behind my lab.', icon: Server },
+  { href: '/blog/', title: 'Blog', description: 'Notes from migrations, experiments, and the projects I am working on.', icon: BookOpen },
   { href: '/resume/', title: 'Resume', description: 'Where I\u2019ve worked, what I\u2019ve done, and the tools I use.', icon: FileText },
 ];
 
@@ -33,11 +33,11 @@ const featuredGridClass = projects.length > 2 ? 'lg:grid-cols-3' : 'lg:grid-cols
 >
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
     <div>
-      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Network engineer · Python & Go developer</p>
+      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Network Engineer · Python & Go Developer</p>
       <h1 class="max-w-4xl text-4xl font-bold tracking-normal text-(--text) sm:text-6xl">Marcus Whited</h1>
       <p class="mt-5 text-xl font-medium text-(--muted)">Secure systems, practical software, and reliable networks</p>
       <p class="mt-6 max-w-3xl text-base leading-8 text-(--muted)">
-        I'm a network engineer who likes working where infrastructure, security, and software meet. At work, I focus on federal perimeter security and Python automation. In my lab, I build with Python and Go, test deployment ideas, and share what I learn.
+      I'm a Network Engineer who loves new challenges and learning at every opportunity. At work, I focus on federal perimeter security and automation. At home, I bring new idea's to life using Go, manage my homelab, and share what I learn.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a href="/projects/" class="rounded-md bg-(--accent) px-4 py-2.5 text-sm font-semibold text-(--accent-contrast) hover:bg-(--accent-strong) hover:text-(--accent-hover-contrast)">View projects</a>
