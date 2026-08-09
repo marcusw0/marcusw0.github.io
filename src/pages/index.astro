@@ -2,12 +2,15 @@
 import { getCollection } from 'astro:content';
 import { BookOpen, BriefcaseBusiness, Code2, FileText, GitBranch, Network, Server, ShieldCheck } from 'lucide-astro';
 import BaseLayout from '@/components/BaseLayout.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
+import GitHubRepoCard from '@/components/GitHubRepoCard.astro';
+import { getPortfolioRepos } from '@/lib/github';
 
-const projects = (await getCollection('projects'))
-  .filter((project) => project.data.featured)
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
+const projects = await getCollection('projects');
+const featuredProjects = await getPortfolioRepos(
+  'marcusw0',
+  projects.map((project) => project.data.github),
+  2,
+);
 
 const features = [
   { href: '/projects/', title: 'Projects', description: 'Current and past projects of mine with Github links.', icon: BriefcaseBusiness },
@@ -24,7 +27,6 @@ const strengths = [
 ];
 
 const targetRoles = ['Software engineering', 'Security engineering', 'Network engineering'];
-const featuredGridClass = projects.length > 2 ? 'lg:grid-cols-3' : 'lg:grid-cols-2';
 ---
 
 <BaseLayout
@@ -98,8 +100,8 @@ const featuredGridClass = projects.length > 2 ? 'lg:grid-cols-3' : 'lg:grid-cols
         </div>
         <a href="/projects/" class="text-sm font-semibold text-(--accent-strong) hover:text-(--text)">All projects</a>
       </div>
-      <div class:list={['grid gap-5 md:grid-cols-2', featuredGridClass]}>
-        {projects.map((project) => <ProjectCard project={project} />)}
+      <div class="grid gap-5 md:grid-cols-2">
+        {featuredProjects.map((repository) => <GitHubRepoCard repository={repository} />)}
       </div>
     </div>
   </section>
