@@ -6,6 +6,7 @@ export type RepoMeta = {
 
 export type GitHubRepository = {
   name: string;
+  displayTitle: string;
   url: string;
   description: string;
   primaryLanguage: string | null;
@@ -17,6 +18,11 @@ export type GitHubRepository = {
 // stops every page reload from re-hitting the API.
 const cache = new Map<string, Promise<RepoMeta | null>>();
 const portfolioCache = new Map<string, Promise<GitHubRepository[]>>();
+
+const portfolioDisplayTitles: Record<string, string> = {
+  homelabctl: 'Homelab Management TUI',
+  httpserver: 'HTTP Server from Scratch',
+};
 
 const token = import.meta.env?.GITHUB_TOKEN ?? process.env.GITHUB_TOKEN;
 
@@ -82,6 +88,7 @@ async function fetchPortfolioRepos(username: string): Promise<GitHubRepository[]
 
         return [{
           name: repo.name,
+          displayTitle: portfolioDisplayTitles[repo.name.toLowerCase()] ?? repo.name,
           url: repo.html_url,
           description: typeof repo.description === 'string' && repo.description.trim()
             ? repo.description.trim().replace(/;/g, ',').replace(/:(?!\/\/)/g, '.')
