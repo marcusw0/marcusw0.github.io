@@ -1,21 +1,19 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 
-const staticPaths = ['/', '/projects/', '/homelab/', '/blog/', '/career/', '/resume/', '/contact/'];
+const staticPaths = ['/', '/projects/', '/homelab/', '/career/', '/contact/'];
 type SitemapEntry = { path: string; date?: Date };
 
 export const GET: APIRoute = async ({ site }) => {
-  const [projects, homelab, blog] = await Promise.all([
+  const [projects, homelab] = await Promise.all([
     getCollection('projects'),
     getCollection('homelab'),
-    getCollection('blog', ({ data }) => !data.draft),
   ]);
 
   const entries: SitemapEntry[] = [
     ...staticPaths.map((path) => ({ path })),
     ...projects.map(({ id, data }) => ({ path: `/projects/${id}/`, date: data.date })),
     ...homelab.map(({ id, data }) => ({ path: `/homelab/${id}/`, date: data.date })),
-    ...blog.map(({ id, data }) => ({ path: `/blog/${id}/`, date: data.date })),
   ];
 
   const urls = entries

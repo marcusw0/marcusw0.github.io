@@ -5,25 +5,26 @@ export const careerExperience = [
     timelineOrganization: 'Bureau of the Fiscal Service',
     period: '2023–Present',
     summary:
-      'I work on perimeter security, traffic policy, and infrastructure automation for federal network services. Python automation cut manual effort by 60%.',
+      'I build automation and tools for federal network services while working on perimeter security and traffic policy.',
     points: [
-      'Coordinate infrastructure work with teams across Treasury, the Federal Reserve, and other government and commercial organizations supporting Trusted Internet Connection services.',
-      'Build and maintain web application firewall policies, access control lists, web filtering, and custom iRules.',
-      'Use Terraform, Ansible, and YAML to make infrastructure changes more consistent and repeatable.',
-      'Built a Python orchestrator that updates roughly 70 Linux servers in health-checked stages, cutting manual effort by 60%.',
+      'Built Python automation for biweekly updates across 78 RHEL servers through GitLab CI/CD. It updates one server at a time within each of three groups, with configurable failure limits, recovery attempts, package exclusions, and reports.',
+      'Developing a customer portal in Go with SQLite and HTMX to display the health of service pool members behind F5 load balancers.',
+      'Write custom F5 iRules in Tcl for traffic routing and filtering, and manage WAF, access-control, and Zscaler security policies.',
+      'Deploy infrastructure with Terraform and Ansible, and teach teams Python, infrastructure as code, Git, and CI/CD.',
+      'Coordinate infrastructure work with Treasury, the Federal Reserve, and other organizations supporting Trusted Internet Connection services.',
     ],
   },
   {
-    title: 'IT Technician',
+    title: 'Network Administrator',
     organization: 'City of Parkersburg',
     timelineOrganization: 'City of Parkersburg',
     period: '2021–2023',
     summary:
-      'Handled security events, user support, and a redesign of the city\u2019s network and firewall infrastructure.',
+      'Designed and modernized the city\u2019s network and firewall infrastructure, with a focus on security, stability, and cost.',
     points: [
       'Investigated security alerts and vulnerabilities, then documented fixes and follow-up recommendations.',
       'Designed new network infrastructure and modernized the firewall architecture, ACLs, and policies.',
-      'Resolved incidents for city staff, police, and fire department users.',
+      'Presented network plans and projects to management, connecting technical decisions to security, reliability, and cost.',
     ],
   },
   {
@@ -34,8 +35,8 @@ export const careerExperience = [
     summary:
       'Led a domain migration for about 450 users, troubleshot service issues, and automated administrative work with Python.',
     points: [
-      'Led a domain migration for about 450 users while protecting data integrity.',
-      'Diagnosed service failures and automated administrative work with Python.',
+      'Served as lead technician for a domain migration of about 450 users, creating processes and tools for other technicians and keeping management informed.',
+      'Performed root cause analysis to restore services securely and automated administrative tasks with Python.',
     ],
   },
   {
@@ -52,20 +53,10 @@ export const careerExperience = [
   },
 ];
 
-export const technicalSkills = [
-  'WAF',
-  'ACLs',
-  'VPNs',
-  'Firewalls',
-  'Proxy services',
-  'Terraform',
-  'Ansible',
-  'Python',
-  'Bash',
-  'YAML',
-  'JSON',
-  'Go',
-  'GitLab CI/CD',
+export const skillGroups = [
+  { title: 'Software & data', skills: ['Go', 'Python', 'Tcl', 'SQLite', 'HTMX'] },
+  { title: 'Automation & delivery', skills: ['Git', 'GitLab CI/CD', 'Terraform', 'Ansible', 'YAML', 'JSON'] },
+  { title: 'Networks & security', skills: ['F5', 'Zscaler', 'Cisco', 'WAF', 'ACLs', 'VPNs', 'Firewalls'] },
 ];
 
 export const careerCredentials = [
@@ -75,3 +66,5 @@ export const careerCredentials = [
   'Corporals Course (2019)',
   'Leading Marines Course (2017)',
 ];
+
+export const careerEducation = 'High School Diploma · Parkersburg South High School, West Virginia';

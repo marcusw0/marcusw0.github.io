@@ -8,10 +8,13 @@ export default defineConfig({
   site: 'https://marcuswhited.tech',
   output: 'static',
   redirects: {
+    '/resume/': '/career/',
+    '/projects/homelab-infrastructure/': '/homelab/',
+    '/projects/security-tools/': '/projects/',
     '/homelab/services/': '/homelab/architecture/#services',
     '/projects/self-hosted-gitlab/': '/homelab/architecture/#services',
-    '/projects/gitlab-deployment-platform/': '/blog/from-compose-folders-to-gitlab/',
-    '/projects/infrastructure-automation/': '/blog/from-compose-folders-to-gitlab/',
+    '/projects/gitlab-deployment-platform/': '/homelab/architecture/#services',
+    '/projects/infrastructure-automation/': '/homelab/architecture/#services',
   },
   integrations: [
     mdx(),

@@ -64,10 +64,10 @@ trusted -> lab.proxy
 | GitLab CE | Internal source control, CI, and protected deployment jobs | Runs on a dedicated virtual machine with OIDC login and local recovery access |
 | OpenBao | Scoped secrets, workload identity, and SSH signing | Runs on a separate restricted virtual machine with independent recovery material |
 
-The public [Homelab Compose Examples project](/projects/homelab-infrastructure/) demonstrates the sanitized deployment patterns and validation checks without publishing the live topology.
+The public [Compose examples repository](https://github.com/marcusw0/homelab-compose-examples) demonstrates the sanitized deployment patterns and validation checks without publishing the live topology.
 
 ## Deployment and Recovery
 
-Service repositories use validation, reviewed changes, and explicit rollback notes. API-backed infrastructure uses OpenTofu where it provides a stable ownership model. File-based services remain in reviewed Compose and YAML. The staged move from manual folders to GitLab and short-lived credentials is documented in [From Compose Folders to GitLab](/blog/from-compose-folders-to-gitlab/).
+Service repositories use validation, reviewed changes, and explicit rollback notes. API-backed infrastructure uses OpenTofu where it provides a stable ownership model. File-based services remain in reviewed Compose and YAML.
 
 Recovery follows dependency order. Network and DNS come first, followed by ingress and identity, then application state. GitLab and OpenBao have separate bootstrap and recovery paths so restoring the control plane does not depend on the services it manages.

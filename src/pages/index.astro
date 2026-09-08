@@ -1,49 +1,43 @@
 ---
 import { getCollection } from 'astro:content';
-import { BookOpen, BriefcaseBusiness, Code2, FileText, GitBranch, Network, Server, ShieldCheck } from 'lucide-astro';
+import { BriefcaseBusiness, Code2, FileText, GitBranch, Network, Server, ShieldCheck } from 'lucide-astro';
 import BaseLayout from '@/components/BaseLayout.astro';
-import GitHubRepoCard from '@/components/GitHubRepoCard.astro';
-import { getPortfolioRepos } from '@/lib/github';
+import ProjectCard from '@/components/ProjectCard.astro';
 
-const projects = await getCollection('projects');
-const featuredProjects = await getPortfolioRepos(
-  'marcusw0',
-  projects.map((project) => project.data.github),
-  2,
-);
+const featuredProjects = (await getCollection('projects', ({ data }) => data.featured))
+  .sort((a, b) => a.data.order - b.data.order);
 
 const features = [
-  { href: '/projects/', title: 'Projects', description: 'Current and past projects of mine with Github links.', icon: BriefcaseBusiness },
+  { href: '/projects/', title: 'Projects', description: 'Go tools, protocol implementations, and language internals, with source code and tests.', icon: BriefcaseBusiness },
   { href: '/homelab/', title: 'Homelab', description: 'The architecture, networking, and decisions behind my lab.', icon: Server },
-  { href: '/blog/', title: 'Blog', description: 'Notes from migrations, experiments, and the projects I am working on.', icon: BookOpen },
-  { href: '/resume/', title: 'Resume', description: 'Where I\u2019ve worked, what I\u2019ve done, and the tools I use.', icon: FileText },
+  { href: '/career/', title: 'Career', description: 'My path through systems administration, network engineering, and software development.', icon: FileText },
 ];
 
 const strengths = [
-  { title: 'Software development', skills: ['Python', 'Go'], icon: Code2 },
+  { title: 'Software development', skills: ['Go', 'Python', 'SQLite', 'HTMX'], icon: Code2 },
   { title: 'Network engineering', skills: ['Load balancing', 'TLS', 'HTTP', 'VPN', 'DNS'], icon: Network },
   { title: 'Security engineering', skills: ['WAF', 'ACLs', 'Web filtering', 'Sandboxing', 'DLP'], icon: ShieldCheck },
   { title: 'Infrastructure & delivery', skills: ['Terraform', 'Ansible', 'GitLab CI/CD', 'Validation'], icon: GitBranch },
 ];
 
-const targetRoles = ['Software engineering', 'Security engineering', 'Network engineering'];
+const targetRoles = ['Software engineering', 'Backend services', 'Developer tooling'];
 ---
 
 <BaseLayout
-  title="Marcus Whited | Network Engineer & Developer"
-  description="Network engineer and developer working across software, security, infrastructure automation, Python, and Go."
+  title="Marcus Whited | Go & Python Developer"
+  description="Go and Python developer with a background in network engineering. Building developer tools, backend services, and automation for real operational problems."
 >
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
     <div>
-      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Network Engineer · Python & Go Developer</p>
+      <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Go & Python Developer · Network Engineer</p>
       <h1 class="max-w-4xl text-4xl font-bold tracking-normal text-(--text) sm:text-6xl">Marcus Whited</h1>
-      <p class="mt-5 text-xl font-medium text-(--muted)">Secure systems, practical software, and reliable networks</p>
+      <p class="mt-5 text-2xl font-semibold leading-snug text-(--text)">I turn operational problems into practical software.</p>
       <p class="mt-6 max-w-3xl text-base leading-8 text-(--muted)">
-      I'm a Network Engineer who loves new challenges and learning at every opportunity. At work, I focus on federal perimeter security and automation. At home, I bring new idea's to life using Go, manage my homelab, and share what I learn.
+        I write Go and Python, drawing on my experience running networks and services. At work, I built automation for biweekly updates across 78 RHEL servers and am developing a service-health portal with Go, SQLite, and HTMX. Outside work, I build terminal tools and explore how HTTP servers and programming languages work.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a href="/projects/" class="rounded-md bg-(--accent) px-4 py-2.5 text-sm font-semibold text-(--accent-contrast) hover:bg-(--accent-strong) hover:text-(--accent-hover-contrast)">View projects</a>
-        <a href="/resume/" class="rounded-md border border-(--border) px-4 py-2.5 text-sm font-semibold text-(--text) hover:border-(--accent) hover:bg-(--surface)">Resume</a>
+        <a href="/career/" class="rounded-md border border-(--border) px-4 py-2.5 text-sm font-semibold text-(--text) hover:border-(--accent) hover:bg-(--surface)">Explore my experience</a>
       </div>
     </div>
     <aside class="rounded-lg border border-(--border) bg-(--surface) p-5 shadow-sm" aria-labelledby="strengths-heading">
@@ -77,32 +71,32 @@ const targetRoles = ['Software engineering', 'Security engineering', 'Network en
     </aside>
   </section>
 
-  <section class="mx-auto max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
-    <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+  <section class="border-y border-(--border) bg-(--surface-strong)/45" aria-labelledby="featured-projects-heading">
+    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+      <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Selected work</p>
+          <h2 id="featured-projects-heading" class="mt-3 text-3xl font-bold text-(--text)">Software I’m building</h2>
+        </div>
+        <a href="/projects/" class="text-sm font-semibold text-(--accent-strong) hover:text-(--text)">All projects</a>
+      </div>
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {featuredProjects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8" aria-label="Explore the site">
+    <div class="grid gap-4 md:grid-cols-3">
       {
         features.map(({ href, title, description, icon: Icon }) => (
           <a href={href} class="rounded-lg border border-(--border) bg-(--surface) p-5 hover:-translate-y-0.5 hover:border-(--accent)">
-            <Icon class="h-5 w-5 text-(--accent-strong)" />
+            <Icon class="h-5 w-5 text-(--accent-strong)" aria-hidden="true" />
             <h2 class="mt-4 text-lg font-semibold text-(--text)">{title}</h2>
             <p class="mt-2 text-sm leading-6 text-(--muted)">{description}</p>
           </a>
         ))
       }
-    </div>
-  </section>
-
-  <section class="border-y border-(--border) bg-(--surface-strong)/45">
-    <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-      <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Selected work</p>
-          <h2 class="mt-3 text-3xl font-bold text-(--text)">Featured projects</h2>
-        </div>
-        <a href="/projects/" class="text-sm font-semibold text-(--accent-strong) hover:text-(--text)">All projects</a>
-      </div>
-      <div class="grid gap-5 md:grid-cols-2">
-        {featuredProjects.map((repository) => <GitHubRepoCard repository={repository} />)}
-      </div>
     </div>
   </section>
 </BaseLayout>

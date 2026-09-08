@@ -2,7 +2,7 @@
 
 Personal portfolio and technical documentation site for Marcus Whited, live at [marcuswhited.tech](https://marcuswhited.tech).
 
-The site covers engineering projects, homelab documentation, a technical blog, and career history. It is fully static — no backend, no tracking, just fast pages.
+The site focuses on software projects in Go, professional experience with Go and Python, and homelab documentation. It is fully static — no backend, no tracking, just fast pages.
 
 ## Built With
 
@@ -14,10 +14,9 @@ The site covers engineering projects, homelab documentation, a technical blog, a
 
 ## What's Here
 
-- **Projects** — public, repository-backed builds plus an opt-in feed of recent GitHub work
+- **Projects** — homelabctl, httpServer, and monkey-interpreter, with implementation notes and links to source and tests
 - **Homelab** — concise documentation of the lab's architecture, networking, and security
-- **Blog** — technical notes on Docker, DNS, routing, hardening, and troubleshooting
-- **Career** — timeline, skills, and certifications
+- **Career** — a combined experience timeline, skills, education, and training page; `/resume/` redirects here
 
 ## Running Locally
 
@@ -36,9 +35,11 @@ npm run dev
 
 The dev server runs at `http://localhost:4321/`. Build the production site with `npm run build` and preview it with `npm run preview`.
 
-## GitHub Portfolio Feed
+## Project Content and GitHub Metadata
 
-The Projects page adds public repositories from `marcusw0` when they have the GitHub topic `portfolio`. The build excludes forks, archived repositories, and repositories already represented by a case study, then shows up to six by most recent push. If the GitHub API is unavailable, the page falls back to the curated case studies and a profile link.
+Project content lives in `src/content/projects/`. The `order` field controls presentation, and `featured: true` includes a project on the homepage. Both the homepage and Projects page render these local entries, so all selected projects remain visible when GitHub is unavailable. There is no automatic repository feed.
+
+Project detail pages optionally fetch GitHub metadata (last push, languages, and latest release) at build time. Failed API requests omit only that metadata; project descriptions, source links, and implementation notes remain available.
 
 ## Contact
 

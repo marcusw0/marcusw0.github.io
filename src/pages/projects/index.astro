@@ -2,68 +2,40 @@
 import { getCollection } from 'astro:content';
 import { Github } from 'lucide-astro';
 import BaseLayout from '@/components/BaseLayout.astro';
-import GitHubRepoCard from '@/components/GitHubRepoCard.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
 import SectionHeader from '@/components/SectionHeader.astro';
-import { getPortfolioRepos } from '@/lib/github';
 
-const projects = (await getCollection('projects')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const githubProfile = 'https://github.com/marcusw0';
-const githubRepos = await getPortfolioRepos(
-  'marcusw0',
-  projects.map((project) => project.data.github),
-);
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="Projects | Marcus Whited" description="Public software, security, and automation projects with source code, implementation notes, and validation evidence.">
+<BaseLayout title="Software Projects | Marcus Whited" description="Go projects exploring developer tools, concurrent service checks, HTTP over TCP, interpreters, and bytecode compilation.">
   <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
     <SectionHeader
-      eyebrow="Built and published"
-      title="Projects"
-      description="Current software projects and detailed case studies spanning development, security, and infrastructure automation."
+      eyebrow="Built in Go"
+      title="Software Projects"
+      description="I build tools I can use and systems that help me understand how software works. These projects explore concurrent services, network protocols, and language implementation."
     />
 
-    {
-      githubRepos.length > 0 ? (
-        <section aria-labelledby="github-work-heading">
-          <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div class="max-w-2xl">
-              <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Current GitHub work</p>
-              <h2 id="github-work-heading" class="mt-2 text-2xl font-bold text-(--text)">Featured software projects</h2>
-              <p class="mt-3 text-sm leading-6 text-(--muted)">Public software projects selected for the portfolio, ordered by their latest GitHub update.</p>
-            </div>
-            <a href={githubProfile} rel="noreferrer" class="inline-flex w-fit items-center gap-2 text-sm font-semibold text-(--accent-strong) hover:text-(--text)">
-              <Github class="h-4 w-4" aria-hidden="true" />
-              View GitHub profile
-            </a>
-          </div>
-          <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {githubRepos.map((repository) => <GitHubRepoCard repository={repository} />)}
-          </div>
-        </section>
-      ) : (
-        <aside class="mt-12 flex flex-col gap-4 rounded-lg border border-(--border) bg-(--surface) p-5 sm:flex-row sm:items-center sm:justify-between" aria-labelledby="github-profile-heading">
-          <div>
-            <h2 id="github-profile-heading" class="font-semibold text-(--text)">More on GitHub</h2>
-            <p class="mt-1 text-sm leading-6 text-(--muted)">Browse my public repositories, source code, and current work directly on GitHub.</p>
-          </div>
-          <a href={githubProfile} rel="noreferrer" class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-(--accent-strong) hover:text-(--text)">
-            <Github class="h-4 w-4" aria-hidden="true" />
-            View GitHub profile
-          </a>
-        </aside>
-      )
-    }
-
-    <section class="mt-16 border-t border-(--border) pt-12" aria-labelledby="case-studies-heading">
-      <div class="mb-6">
-        <p class="text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Implementation deep dives</p>
-        <h2 id="case-studies-heading" class="mt-2 text-2xl font-bold text-(--text)">Infrastructure &amp; security case studies</h2>
-        <p class="mt-3 max-w-2xl text-sm leading-6 text-(--muted)">Detailed implementation decisions, validation evidence, and operational lessons connected to public source code.</p>
+    <section aria-labelledby="selected-projects-heading">
+      <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 id="selected-projects-heading" class="text-2xl font-bold text-(--text)">Selected work</h2>
+          <p class="mt-3 max-w-2xl text-sm leading-6 text-(--muted)">Explore the implementation, design decisions, and tests behind each project.</p>
+        </div>
+        <a href="https://github.com/marcusw0" rel="noreferrer" class="inline-flex w-fit shrink-0 items-center gap-2 text-sm font-semibold text-(--accent-strong) hover:text-(--text)">
+          <Github class="h-4 w-4" aria-hidden="true" />
+          View GitHub profile
+        </a>
       </div>
-      <div class="grid gap-5 md:grid-cols-2">
+      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => <ProjectCard project={project} />)}
       </div>
     </section>
+
+    <aside class="mt-12 rounded-lg border border-(--border) bg-(--surface) p-6" aria-labelledby="engineering-at-work-heading">
+      <h2 id="engineering-at-work-heading" class="text-xl font-semibold text-(--text)">Software engineering at work</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-7 text-(--muted)">My professional work includes Python automation for biweekly updates across 78 RHEL servers and a customer service-health portal in development with Go, SQLite, and HTMX.</p>
+      <a href="/career/" class="mt-4 inline-flex text-sm font-semibold text-(--accent-strong) hover:text-(--text)">Explore my experience <span aria-hidden="true">&nbsp;→</span></a>
+    </aside>
   </section>
 </BaseLayout>

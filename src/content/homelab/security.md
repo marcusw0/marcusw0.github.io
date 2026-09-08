@@ -28,8 +28,6 @@ Authentik provides application authentication while local recovery paths remain 
 
 OpenBao runs in a separate restricted virtual-machine boundary. Production infrastructure plans can authenticate with GitLab ID tokens, and per-service roles define which secret path or signing action a job may use. Downstream cutovers and short-lived SSH trust are still in progress. Existing credentials remain until their replacements pass validation.
 
-The design and deployment sequence are covered in [From Compose Folders to GitLab](/blog/from-compose-folders-to-gitlab/) instead of being repeated here.
-
 ## Hardening Backlog
 
 - Restrict every administrative route to trusted LAN or VPN sources in addition to identity policy.
