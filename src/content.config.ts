@@ -15,16 +15,11 @@ const projects = defineCollection({
   schema: sharedSchema.extend({
     github: z.url(),
     featured: z.boolean().default(false),
+    order: z.number().default(0),
+    focus: z.string(),
     status: z.enum(['active', 'complete', 'ongoing']).optional(),
     role: z.string().optional(),
     outcomes: z.array(z.string()).default([]),
-  }),
-});
-
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
-  schema: sharedSchema.extend({
-    draft: z.boolean().default(false),
   }),
 });
 
@@ -38,6 +33,5 @@ const homelab = defineCollection({
 
 export const collections = {
   projects,
-  blog,
   homelab,
 };
