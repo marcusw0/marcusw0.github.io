@@ -1,14 +1,14 @@
 ---
 title: Homelab Security
-description: The exposure, identity, secrets, and container controls I use—and the hardening work that remains.
-date: 2026-07-30
+description: How I manage authentication, secrets, and service access, and the security work I am still finishing.
+date: 2026-09-18
 tags: ["security", "identity", "secrets"]
 tech: ["OpenBao", "GitLab OIDC", "Traefik", "Authentik", "TLS", "Docker"]
 section: "security"
 order: 3
 ---
 
-The baseline is simple. Services should not become reachable by accident, privileged interfaces stay restricted, and sensitive dependencies remain private. I document unfinished controls alongside implemented ones so the site does not imply a stronger security posture than the lab currently has.
+I want to know which services are reachable, who can access them, and what credentials they need. I use private networks, authentication, and scoped access to keep those connections limited. Some of that work is still in progress, especially moving services to OpenBao and tightening access to administrative interfaces.
 
 ## Control Summary
 
@@ -24,11 +24,13 @@ The baseline is simple. Services should not become reachable by accident, privil
 
 ## Identity and Secrets
 
-Authentik provides application authentication while local recovery paths remain available for critical internal services. Its database stays on a private network, and the replacement outpost design removes automatic Docker-socket management in favor of explicitly deployed outposts.
+I use Authentik for application authentication and keep local recovery access for critical internal services. Its database stays on a private network. I am replacing automatically managed outposts with ones I deploy explicitly so they no longer need access to the Docker socket.
 
-OpenBao runs in a separate restricted virtual-machine boundary. Production infrastructure plans can authenticate with GitLab ID tokens, and per-service roles define which secret path or signing action a job may use. Downstream cutovers and short-lived SSH trust are still in progress. Existing credentials remain until their replacements pass validation.
+OpenBao runs on a separate virtual machine with restricted access. Infrastructure jobs can authenticate using GitLab ID tokens, and each service's role limits which secrets or signing operations a job can use. I am still moving services to those roles and configuring trust for short-lived SSH certificates. I keep existing credentials in place until I have tested their replacements.
 
 ## Hardening Backlog
+
+The next steps are to:
 
 - Restrict every administrative route to trusted LAN or VPN sources in addition to identity policy.
 - Finish explicit Authentik outposts and remove unnecessary Docker-socket access.

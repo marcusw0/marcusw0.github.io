@@ -11,8 +11,8 @@ type Props = {
 };
 
 const {
-  title = 'Marcus Whited | Go & Python Developer',
-  description = 'Marcus Whited\u2019s software portfolio: Go projects, Python automation, and experience building and operating network services.',
+  title = 'Marcus Whited | Go, Python & Network Engineering',
+  description = 'Go and Python projects, network engineering, and infrastructure automation by Marcus Whited.',
   image = '/social-card.png',
   robots = 'index, follow',
 } = Astro.props;
@@ -44,9 +44,15 @@ const socialImage = new URL(image, Astro.site);
     <meta name="twitter:image" content={socialImage} />
     <title>{title}</title>
     <script is:inline>
-      const storedTheme = localStorage.getItem('theme');
+      let storedTheme;
+      try {
+        storedTheme = localStorage.getItem('theme');
+      } catch {
+        // Use the system preference when browser storage is unavailable.
+      }
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      document.documentElement.classList.toggle('dark', storedTheme ? storedTheme === 'dark' : prefersDark);
+      const isDark = storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark);
+      document.documentElement.classList.toggle('dark', isDark);
     </script>
   </head>
   <body>

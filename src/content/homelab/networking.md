@@ -1,14 +1,14 @@
 ---
 title: Homelab Networking
-description: The routing, DNS, ingress, and segmentation decisions that keep service access predictable.
-date: 2026-07-30
+description: How I use DNS, Traefik, and private networks to connect services and control access.
+date: 2026-09-18
 tags: ["networking", "dns", "reverse-proxy"]
 tech: ["Traefik", "Cloudflare", "Technitium DNS", "Docker"]
 section: "networking"
 order: 2
 ---
 
-The network design has two deliberate entry paths. Trusted clients resolve private services through Technitium DNS, while routed HTTP traffic reaches applications through Traefik. Application and database networks remain private unless a documented protocol requires direct access.
+I use Technitium DNS to resolve private services and Traefik to route HTTP requests to applications. Databases and other backends stay on private networks. Services such as DNS need direct access, so I configure those ports separately.
 
 ## Request Flow
 
@@ -42,14 +42,14 @@ apps -> state
 | DNS | TCP and UDP directly from trusted networks |
 | Directory services | Encrypted passthrough with no public endpoint |
 
-Traefik redirects HTTP to HTTPS, obtains wildcard certificates through DNS-01 validation, and reads routes from watched configuration files. Technitium provides internal DNS, limits recursion to private networks, and forwards upstream requests over encrypted transport.
+Traefik redirects HTTP to HTTPS, obtains wildcard certificates through DNS-01 validation, and reads routes from watched configuration files. Technitium provides internal DNS, limits recursion to private networks, and forwards upstream requests over encrypted transport. The table describes my access policy; I am still applying network restrictions to every administrative route, as described on the [security page](/homelab/security/).
 
 ## Operating Rules
 
-- Every Compose stack declares its networks and joins the shared frontend only when Traefik needs to reach it.
-- Host ports are reserved for intentional ingress, DNS, identity requirements, or documented exceptions.
-- Backend ports in route definitions must match the service that owns them. Stale proxy configuration is treated as an inventory error.
-- DNS records live beside the service definition or reviewed infrastructure model that owns them.
-- Routing changes are tested from both trusted and untrusted paths before they are considered complete.
+- I define networks in each Compose stack and connect services to the shared frontend only when Traefik needs to reach them.
+- I publish host ports only when a service needs direct access, and document why it needs them.
+- I check that proxy routes point to the ports the application actually uses and remove stale routes when services change.
+- I keep DNS records with the service configuration or infrastructure definition that manages them.
+- I test routing changes from both trusted and untrusted networks to check that the access rules work as intended.
 
 See the [Homelab Overview](/homelab/architecture/) for service placement and [Homelab Security](/homelab/security/) for controls applied to these paths.
