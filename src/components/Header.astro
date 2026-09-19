@@ -41,7 +41,7 @@ const currentPath = Astro.url.pathname;
     </div>
   </nav>
   <nav class="border-t border-(--border) px-4 py-2 md:hidden" aria-label="Primary navigation">
-    <div class="nav-scroll mx-auto flex max-w-6xl gap-2 overflow-x-auto">
+    <div class="mx-auto flex max-w-6xl flex-wrap gap-2">
       {
         navItems.map((item) => {
           const active = item.href === '/' ? currentPath === '/' : currentPath.startsWith(item.href);

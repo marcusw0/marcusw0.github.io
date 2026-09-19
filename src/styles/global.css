@@ -49,14 +49,7 @@ body {
 
 main {
   flex: 1;
-}
-
-.nav-scroll {
-  scrollbar-width: none;
-}
-
-.nav-scroll::-webkit-scrollbar {
-  display: none;
+  scroll-margin-top: 6rem;
 }
 
 .skip-link {
@@ -216,6 +209,21 @@ button {
   border-radius: 0.5rem;
   background: var(--surface);
   padding: 1rem;
+}
+
+@media (width < 48rem) {
+  header > nav a {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+  }
+
+  #main-content,
+  .prose-tech h1,
+  .prose-tech h2,
+  .prose-tech h3 {
+    scroll-margin-top: 12rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

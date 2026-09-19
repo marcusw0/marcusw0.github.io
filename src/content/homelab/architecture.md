@@ -1,14 +1,14 @@
 ---
 title: Homelab Overview
-description: A concise, sanitized look at the architecture, core services, trust boundaries, and recovery priorities in my homelab.
-date: 2026-07-30
+description: How I run services in my homelab, from DNS and authentication to deployments and recovery.
+date: 2026-09-18
 tags: ["architecture", "services", "operations"]
 tech: ["Docker", "Traefik", "GitLab", "OpenBao", "Technitium DNS", "Authentik"]
 section: "architecture"
 order: 1
 ---
 
-I use the lab to practice operating complete systems across networking, identity, application delivery, secrets, and recovery. This page is the high-level map. The [networking](/homelab/networking/) and [security](/homelab/security/) pages cover the decisions inside their respective boundaries.
+My homelab gives me a place to build and run services, try out tools, and work through the problems that come with keeping everything connected. I manage DNS, authentication, deployments, and secrets alongside the applications that depend on them. The [networking](/homelab/networking/) and [security](/homelab/security/) pages go into more detail about those parts of the lab.
 
 ## Architecture
 
@@ -45,14 +45,12 @@ trusted -> lab.dns
 trusted -> lab.proxy
 ```
 
-*Addresses, hostnames, credentials, and management endpoints are intentionally omitted.*
-
 ## Design Principles
 
-- Publish applications through one controlled ingress path instead of exposing each service directly.
-- Keep identity and persistent state on private networks with only the connections they require.
-- Treat DNS, certificates, identity, and secrets as infrastructure dependencies with their own health and recovery checks.
-- Make deployments reviewable and repeatable without hiding incomplete migrations or recovery work.
+- I route web applications through Traefik so I can manage access and TLS in one place.
+- I keep databases and other backend services on private networks, with access limited to the applications that need them.
+- I account for DNS, certificates, authentication, and secrets when checking service health and planning recovery.
+- I keep deployment configuration in Git so I can review changes and repeat a deployment when needed.
 
 ## Services
 
@@ -64,10 +62,10 @@ trusted -> lab.proxy
 | GitLab CE | Internal source control, CI, and protected deployment jobs | Runs on a dedicated virtual machine with OIDC login and local recovery access |
 | OpenBao | Scoped secrets, workload identity, and SSH signing | Runs on a separate restricted virtual machine with independent recovery material |
 
-The public [Compose examples repository](https://github.com/marcusw0/homelab-compose-examples) demonstrates the sanitized deployment patterns and validation checks without publishing the live topology.
+I share examples of these configurations and their validation checks in my [Compose examples repository](https://github.com/marcusw0/homelab-compose-examples).
 
 ## Deployment and Recovery
 
-Service repositories use validation, reviewed changes, and explicit rollback notes. API-backed infrastructure uses OpenTofu where it provides a stable ownership model. File-based services remain in reviewed Compose and YAML.
+I keep validation checks and rollback notes with each service's configuration. I use OpenTofu for infrastructure I can manage through an API, and Compose and YAML for services configured through files.
 
-Recovery follows dependency order. Network and DNS come first, followed by ingress and identity, then application state. GitLab and OpenBao have separate bootstrap and recovery paths so restoring the control plane does not depend on the services it manages.
+My recovery plan starts with the network and DNS, followed by Traefik and authentication, then application data. GitLab and OpenBao have separate bootstrap and recovery paths so I can restore them without depending on the services they manage. Testing OpenBao recovery is still on my [security backlog](/homelab/security/#hardening-backlog).

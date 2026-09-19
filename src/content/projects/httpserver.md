@@ -1,7 +1,7 @@
 ---
 title: httpServer
 description: An HTTP/1.1 server built on TCP sockets in Go, with incremental request parsing, header handling, and explicit response writing.
-date: 2026-08-01
+date: 2026-09-18
 tech: ["Go", "TCP", "HTTP/1.1", "State machines"]
 github: "https://github.com/marcusw0/httpServer"
 featured: true
@@ -42,7 +42,7 @@ curl -i http://localhost:9988/yourproblem
 curl -i http://localhost:9988/myproblem
 ```
 
-## Engineering Evidence
+## Tests and Source
 
 - [Request parser and tests](https://github.com/marcusw0/httpServer/tree/main/internal/request)
 - [Header parser and tests](https://github.com/marcusw0/httpServer/tree/main/internal/headers)
@@ -50,6 +50,6 @@ curl -i http://localhost:9988/myproblem
 
 ## Scope and Lessons
 
-This is a focused implementation for learning HTTP and stream parsing. It currently handles one request per connection and bodies with a declared content length. Chunked request bodies, persistent connections, and production server hardening remain outside its implemented scope.
+I built this to learn HTTP and stream parsing. It handles one request per connection and bodies with a declared content length. Chunked request bodies and persistent connections are not implemented, and it is not intended for production use.
 
-The useful engineering lesson is that a read boundary is not a message boundary. Explicit parser states and tests make that distinction visible.
+Working on the parser helped me understand why a TCP read can end partway through a request line or header. Keeping track of parser state lets the next read pick up where the previous one stopped.

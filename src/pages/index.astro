@@ -14,26 +14,29 @@ const features = [
 ];
 
 const strengths = [
-  { title: 'Software development', skills: ['Go', 'Python', 'SQLite', 'HTMX'], icon: Code2 },
-  { title: 'Network engineering', skills: ['Load balancing', 'TLS', 'HTTP', 'VPN', 'DNS'], icon: Network },
-  { title: 'Security engineering', skills: ['WAF', 'ACLs', 'Web filtering', 'Sandboxing', 'DLP'], icon: ShieldCheck },
-  { title: 'Infrastructure & delivery', skills: ['Terraform', 'Ansible', 'GitLab CI/CD', 'Validation'], icon: GitBranch },
+  { title: 'Software development', skills: ['Go', 'Python', 'Concurrency', 'Testing'], icon: Code2 },
+  { title: 'Network engineering', skills: ['Load balancing', 'HTTP', 'TCP', 'TLS', 'DNS'], icon: Network },
+  { title: 'Security & access', skills: ['Authentication', 'Access control', 'Firewalls'], icon: ShieldCheck },
+  { title: 'Infrastructure & delivery', skills: ['Terraform', 'Ansible', 'GitLab CI/CD', 'Linux'], icon: GitBranch },
 ];
 
-const targetRoles = ['Software engineering', 'Backend services', 'Developer tooling'];
+const targetRoles = ['Networking software', 'Infrastructure engineering', 'Backend services', 'Developer tooling'];
 ---
 
 <BaseLayout
-  title="Marcus Whited | Go & Python Developer"
-  description="Go and Python developer with a background in network engineering. Building developer tools, backend services, and automation for real operational problems."
+  title="Marcus Whited | Go, Python & Network Engineering"
+  description="I build tools in Go and Python, troubleshoot network services, and automate infrastructure. My projects and experience in networking, security, and systems administration."
 >
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8 lg:py-24">
     <div>
       <p class="mb-4 text-sm font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Go & Python Developer · Network Engineer</p>
       <h1 class="max-w-4xl text-4xl font-bold tracking-normal text-(--text) sm:text-6xl">Marcus Whited</h1>
-      <p class="mt-5 text-2xl font-semibold leading-snug text-(--text)">I turn operational problems into practical software.</p>
+      <p class="mt-5 text-2xl font-semibold leading-snug text-(--text)">I build tools in Go and Python.</p>
       <p class="mt-6 max-w-3xl text-base leading-8 text-(--muted)">
-        I write Go and Python, drawing on my experience running networks and services. At work, I built automation for biweekly updates across 78 RHEL servers and am developing a service-health portal with Go, SQLite, and HTMX. Outside work, I build terminal tools and explore how HTTP servers and programming languages work.
+        My background is in networking, security, and systems administration. In my current role, I troubleshoot network services and write software to automate tasks like server updates and security blocklist changes. I also teach other teams Python, Git, and CI/CD to help them build their own automation.
+      </p>
+      <p class="mt-4 max-w-3xl text-base leading-8 text-(--muted)">
+        Building software is the direction I want to take my career. Outside work, I build terminal tools, run a homelab, and use projects like an HTTP server and a programming language interpreter to learn more about how software works.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a href="/projects/" class="rounded-md bg-(--accent) px-4 py-2.5 text-sm font-semibold text-(--accent-contrast) hover:bg-(--accent-strong) hover:text-(--accent-hover-contrast)">View projects</a>
@@ -41,8 +44,8 @@ const targetRoles = ['Software engineering', 'Backend services', 'Developer tool
       </div>
     </div>
     <aside class="rounded-lg border border-(--border) bg-(--surface) p-5 shadow-sm" aria-labelledby="strengths-heading">
-      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">Core strengths</p>
-      <h2 id="strengths-heading" class="mt-2 text-xl font-semibold text-(--text)">Engineering across code and infrastructure</h2>
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-(--accent-strong)">What I work with</p>
+      <h2 id="strengths-heading" class="mt-2 text-xl font-semibold text-(--text)">Software, networks, and infrastructure</h2>
       <div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
         {
           strengths.map(({ title, skills, icon: Icon }) => (
