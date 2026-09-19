@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import mdx from '@astrojs/mdx';
 import d2 from 'astro-d2';
 import tailwindcss from '@tailwindcss/vite';
@@ -26,7 +27,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   markdown: {
-    rehypePlugins: [rehypeD2Dark],
+    processor: unified({ rehypePlugins: [rehypeD2Dark] }),
     shikiConfig: {
       theme: 'github-dark',
       wrap: true,
